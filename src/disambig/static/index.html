@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>disambig review</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #ffffff; --ink: #1a1a1a; --muted: #6b6b6b; --line: #e2e2e2;
+    --accent: #0b5fff; --accent-bg: #eef4ff; --warn: #9a6700; --warn-bg: #fff8e5;
+    --ok: #1a7f37; --mono: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 15px/1.45 -apple-system, system-ui, sans-serif; }
+  main { max-width: 880px; margin: 0 auto; padding: 16px 20px 120px; }
+  header { display: flex; justify-content: space-between; align-items: baseline;
+           border-bottom: 1px solid var(--line); padding-bottom: 8px; margin-bottom: 14px; }
+  header h1 { font-size: 15px; margin: 0; }
+  #progress { color: var(--muted); font-size: 13px; }
+  .badge { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 10px;
+           background: var(--accent-bg); color: var(--accent); margin-right: 6px; }
+  .badge.demo { background: var(--warn-bg); color: var(--warn); font-weight: 600; }
+  #raw { font-size: 21px; font-weight: 600; margin: 10px 0 4px; overflow-wrap: anywhere; }
+  #context { color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  #context .coaffil { margin-top: 2px; }
+  #assessment { font-size: 12.5px; color: var(--muted); margin-bottom: 8px; }
+  ol#cands { list-style: none; margin: 0; padding: 0; }
+  ol#cands li { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px;
+                margin-bottom: 6px; cursor: pointer; display: flex; gap: 10px; }
+  ol#cands li.sel { border-color: var(--accent); background: var(--accent-bg); }
+  .keycap { font-family: var(--mono); font-size: 12px; border: 1px solid var(--line);
+            border-radius: 4px; padding: 0 5px; height: 20px; align-self: flex-start;
+            margin-top: 2px; background: #fafafa; color: var(--muted); }
+  .cand-name { font-weight: 600; }
+  .cand-meta, .cand-aliases, .cand-rel { font-size: 12.5px; color: var(--muted);
+                                          overflow-wrap: anywhere; }
+  .llm-tag { font-size: 11px; color: var(--ok); border: 1px solid var(--ok);
+             border-radius: 10px; padding: 0 6px; margin-left: 6px; }
+  .just { display: none; font-size: 12.5px; color: var(--warn); margin-top: 3px; }
+  body.show-just .just { display: block; }
+  #searchwrap { margin-top: 12px; }
+  #search { width: 100%; padding: 8px 10px; font-size: 14px; border: 1px solid var(--line);
+            border-radius: 8px; }
+  #notewrap { margin-top: 8px; }
+  #note { width: 100%; padding: 6px 10px; font-size: 13px; border: 1px solid var(--line);
+          border-radius: 8px; }
+  #keybar { position: fixed; bottom: 0; left: 0; right: 0; background: #fafafa;
+            border-top: 1px solid var(--line); padding: 8px 20px; font-size: 12.5px;
+            color: var(--muted); }
+  #keybar b { font-family: var(--mono); color: var(--ink); font-weight: 600; }
+  #done { display: none; font-size: 18px; margin-top: 40px; }
+  #help { display: none; position: fixed; inset: 10% 20%; background: #fff;
+          border: 1px solid var(--line); border-radius: 12px; padding: 24px;
+          box-shadow: 0 8px 40px rgba(0,0,0,.15); z-index: 10; }
+  #help.open { display: block; }
+  #help table { border-collapse: collapse; }
+  #help td { padding: 3px 14px 3px 0; font-size: 13.5px; }
+  #toast { position: fixed; top: 12px; right: 16px; background: var(--ink); color: #fff;
+           padding: 6px 14px; border-radius: 8px; font-size: 13px; opacity: 0;
+           transition: opacity .2s; }
+  #toast.on { opacity: 1; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>disambig review</h1>
+    <div id="progress"></div>
+  </header>
+  <div id="badges"></div>
+  <div id="raw"></div>
+  <div id="context"></div>
+  <div id="assessment"></div>
+  <ol id="cands"></ol>
+  <div id="searchwrap">
+    <input id="search" type="text"
+           placeholder="c — search ROR to correct (name, alias, acronym)…" autocomplete="off">
+  </div>
+  <div id="notewrap">
+    <input id="note" type="text" placeholder=", — note (kept with the label)" autocomplete="off">
+  </div>
+  <div id="done">Queue empty. Nothing left to label.</div>
+</main>
+<div id="keybar">
+  <b>1–9</b> toggle · <b>⏎</b> save selection · <b>a</b> accept LLM set ·
+  <b>x</b> ambiguous · <b>n</b> no ROR exists · <b>s</b> skip · <b>c</b> search ·
+  <b>j</b> show LLM reasoning · <b>z</b> undo · <b>?</b> help
+</div>
+<div id="help">
+  <h2>Keys</h2>
+  <table>
+    <tr><td><b>1–9</b></td><td>toggle candidate selection (multi-select for multi-affiliation strings)</td></tr>
+    <tr><td><b>Enter</b></td><td>save current selection as the gold label</td></tr>
+    <tr><td><b>a</b></td><td>select exactly the LLM-proposed set and save</td></tr>
+    <tr><td><b>x</b></td><td>ambiguous: evidence cannot decide (valid, important label)</td></tr>
+    <tr><td><b>n</b></td><td>no ROR record exists for this organisation</td></tr>
+    <tr><td><b>s</b></td><td>skip for now (item returns later)</td></tr>
+    <tr><td><b>c</b></td><td>search ROR directly to correct; results join the numbered list</td></tr>
+    <tr><td><b>j</b></td><td>reveal LLM justifications (viewing is recorded with the label)</td></tr>
+    <tr><td><b>,</b></td><td>focus the note field</td></tr>
+    <tr><td><b>z</b></td><td>undo the previous label</td></tr>
+    <tr><td><b>Esc</b></td><td>leave search/note field, or close this help</td></tr>
+  </table>
+</div>
+<div id="toast"></div>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g,
+  ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+
+let annotator = new URLSearchParams(location.search).get("annotator")
+  || localStorage.getItem("annotator");
+while (!annotator) annotator = prompt("Annotator id (e.g. mark):");
+localStorage.setItem("annotator", annotator);
+
+let state = null; // {item, cands, selected:Set, t0, justViewed}
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  if (!res.ok) throw new Error(path + " -> " + res.status + " " + await res.text());
+  return res.json();
+}
+
+function renderProgress(p) {
+  const per = Object.entries(p.strata)
+    .map(([k, v]) => `${k.split("_")[0]} ${v.done}/${v.total}`).join(" · ");
+  $("progress").textContent = `${annotator} — ${p.done}/${p.total}` + (per ? ` (${per})` : "");
+}
+
+function candHtml(c, i) {
+  const place = [c.city, c.country].filter(Boolean).join(", ");
+  const rels = (c.relationships || [])
+    .map(r => `${esc(r.rel_type)}: ${esc(r.label)}`).join(" · ");
+  return `<li data-i="${i}">
+    <span class="keycap">${i + 1 <= 9 ? i + 1 : "·"}</span>
+    <div>
+      <div class="cand-name">${esc(c.name)}
+        ${c.llm_proposed ? `<span class="llm-tag">LLM${c.llm_confidence != null
+          ? " " + Number(c.llm_confidence).toFixed(2) : ""}</span>` : ""}
+      </div>
+      <div class="cand-meta">${esc(c.ror_id)} · ${esc(place || "location unknown")}
+        · ${esc((c.org_types || []).join(", ") || "type unknown")}
+        ${c.match_score != null ? " · match " + Number(c.match_score).toFixed(2) : ""}</div>
+      ${c.aliases && c.aliases.length
+        ? `<div class="cand-aliases">aka ${esc(c.aliases.slice(0, 5).join(" · "))}</div>` : ""}
+      ${rels ? `<div class="cand-rel">${rels}</div>` : ""}
+      ${c.llm_justification ? `<div class="just">LLM: ${esc(c.llm_justification)}</div>` : ""}
+    </div></li>`;
+}
+
+function renderCands() {
+  $("cands").innerHTML = state.cands.map((c, i) => candHtml(c, i)).join("");
+  for (const li of $("cands").children) {
+    li.classList.toggle("sel", state.selected.has(Number(li.dataset.i)));
+    li.onclick = () => { toggle(Number(li.dataset.i)); };
+  }
+}
+
+function toggle(i) {
+  if (i < 0 || i >= state.cands.length) return;
+  state.selected.has(i) ? state.selected.delete(i) : state.selected.add(i);
+  renderCands();
+}
+
+async function load() {
+  const data = await api(`/api/next?annotator=${encodeURIComponent(annotator)}`);
+  renderProgress(data.progress);
+  document.body.classList.remove("show-just");
+  $("search").value = ""; $("note").value = "";
+  if (!data.item) {
+    state = null;
+    for (const id of ["raw", "context", "assessment", "cands", "badges"]) $(id).innerHTML = "";
+    $("done").style.display = "block";
+    return;
+  }
+  $("done").style.display = "none";
+  const item = data.item;
+  const cands = (data.proposal && data.proposal.candidates) || [];
+  state = { item, cands, selected: new Set(), t0: performance.now(), justViewed: false };
+  $("badges").innerHTML =
+    (item.demo ? `<span class="badge demo">DEMO DATA — not gold standard</span>` : "") +
+    `<span class="badge">${esc(item.stratum)}</span>` +
+    (item.sub_stratum ? `<span class="badge">${esc(item.sub_stratum)}</span>` : "") +
+    `<span class="badge">${esc(item.source_frame)}</span>`;
+  $("raw").textContent = item.raw_affiliation;
+  const ctx = item.context || {};
+  $("context").innerHTML = [
+    [ctx.author_name, ctx.title, ctx.venue, ctx.year].filter(Boolean).map(esc).join(" · "),
+    ctx.doi ? `doi: ${esc(ctx.doi)}` : "",
+    ctx.coauthor_affiliations && ctx.coauthor_affiliations.length
+      ? `<div class="coaffil">co-author affiliations: ${
+          ctx.coauthor_affiliations.slice(0, 4).map(esc).join(" | ")}</div>` : ""
+  ].filter(Boolean).join("<br>");
+  const prop = data.proposal || {};
+  $("assessment").textContent = prop.llm_error
+    ? `LLM first pass failed (${prop.llm_error}); candidates are ROR matcher output only.`
+    : prop.llm_assessment ? `LLM first-pass assessment: ${prop.llm_assessment}` : "";
+  renderCands();
+}
+
+async function submit(outcome) {
+  if (!state) return;
+  const chosen = [...state.selected].sort((a, b) => a - b);
+  const body = {
+    annotator, item_id: state.item.item_id, outcome,
+    selected_ror_ids: chosen.map(i => state.cands[i].ror_id),
+    selected_ranks: chosen.map(i => i + 1),
+    justification_viewed: state.justViewed,
+    note: $("note").value.trim() || null,
+    elapsed_ms: Math.round(performance.now() - state.t0),
+  };
+  try {
+    const res = await api("/api/label", { method: "POST",
+      headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    toast(res.decision || outcome);
+  } catch (err) { toast("save failed — " + err.message); return; }
+  load();
+}
+
+function acceptLlmSet() {
+  if (!state) return;
+  state.selected = new Set(
+    state.cands.map((c, i) => c.llm_proposed ? i : -1).filter(i => i >= 0));
+  if (!state.selected.size) { toast("LLM proposed nothing; select manually"); renderCands(); return; }
+  renderCands();
+  submit("resolved");
+}
+
+let searchTimer = null;
+$("search").addEventListener("input", () => {
+  clearTimeout(searchTimer);
+  const q = $("search").value.trim();
+  if (q.length < 3) return;
+  searchTimer = setTimeout(async () => {
+    try {
+      const res = await api(`/api/ror/search?q=${encodeURIComponent(q)}`);
+      const known = new Set(state.cands.map(c => c.ror_id));
+      for (const c of res.candidates) if (!known.has(c.ror_id)) state.cands.push(c);
+      renderCands();
+    } catch (err) { toast("ROR search failed — " + err.message); }
+  }, 350);
+});
+
+function toast(msg) {
+  $("toast").textContent = msg;
+  $("toast").classList.add("on");
+  setTimeout(() => $("toast").classList.remove("on"), 1300);
+}
+
+document.addEventListener("keydown", ev => {
+  const inField = ev.target === $("search") || ev.target === $("note");
+  if (ev.key === "Escape") { $("help").classList.remove("open"); ev.target.blur(); return; }
+  const isEnter = ev.key === "Enter" || ev.key === "Return";
+  if (inField) {
+    if (isEnter) { ev.preventDefault(); ev.target.blur(); }
+    return;
+  }
+  if (ev.metaKey || ev.ctrlKey || ev.altKey) return;
+  if (!state && !"z?".includes(ev.key)) return;
+  if (ev.key >= "1" && ev.key <= "9") { toggle(Number(ev.key) - 1); }
+  else if (isEnter) {
+    if (!state.selected.size) { toast("nothing selected"); return; }
+    submit("resolved");
+  }
+  else if (ev.key === "a") acceptLlmSet();
+  else if (ev.key === "x") submit("ambiguous");
+  else if (ev.key === "n") submit("no_ror");
+  else if (ev.key === "s") submit("skipped");
+  else if (ev.key === "j") { state.justViewed = true; document.body.classList.add("show-just"); }
+  else if (ev.key === "c" || ev.key === "/") { ev.preventDefault(); $("search").focus(); }
+  else if (ev.key === ",") { ev.preventDefault(); $("note").focus(); }
+  else if (ev.key === "z") {
+    api("/api/undo", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ annotator }) })
+      .then(res => { toast(res.undone_item_id ? "undone" : "nothing to undo"); load(); });
+  }
+  else if (ev.key === "?") $("help").classList.toggle("open");
+});
+
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+config/.env
+data/interim/http_cache.sqlite
+data/interim/review.sqlite
+data/demo/demo_review.sqlite
+logs/*.jsonl
+.DS_Store

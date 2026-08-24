@@ -1,0 +1,132 @@
+# Strata design for both benchmarks. Phase 0 deliverable, for review before
+# any labelling at scale. Cell sizes are targets, not guarantees; shortfalls
+# are reported, never silently backfilled from easier strata.
+
+benchmark_a:
+  name: institutional-disambiguation
+  unit: work-author-affiliation instance (see METHODS.md section 2)
+  total_target: 2000
+  pilot_total: 50
+  iaa_subsample_total: 200 # 20 per stratum, second annotator, Cohen's kappa
+  strata:
+    - id: anglophone_university
+      label: Anglophone universities (control)
+      target: 200
+      pilot: 5
+      inclusion: >
+        Universities in US, UK, CA, AU, NZ, IE with Latin-script strings and
+        no hospital/medical-centre tokens. The easy baseline every source
+        should get right; exists to anchor the hard strata.
+    - id: non_latin_script
+      label: Non-Latin script in the original string
+      target: 200
+      pilot: 5
+      inclusion: >
+        The raw affiliation string contains a majority of non-Latin
+        characters. Sub-quotas keep one script from dominating.
+      sub_quotas:
+        chinese: 50
+        japanese: 35
+        korean: 30
+        russian_cyrillic: 35
+        arabic: 30
+        thai: 20
+    - id: transliterated
+      label: Transliterated / inconsistently romanised names
+      target: 200
+      pilot: 5
+      inclusion: >
+        Latin-script strings for institutions whose canonical name is in
+        another script, sampled to include known variant romanisations
+        (e.g. pinyin vs Wade-Giles, Hepburn variants, BGN/PCGN vs ISO 9).
+    - id: hospital_medical
+      label: Hospitals and academic medical centres
+      target: 200
+      pilot: 5
+      inclusion: >
+        Strings containing hospital / clinic / medical centre / NHS trust
+        tokens (multilingual token list in sampling code). This is where
+        hospital-versus-parent-university conflation lives.
+    - id: government_lab
+      label: Government labs, national institutes, research councils
+      target: 200
+      pilot: 5
+      inclusion: >
+        National labs, CNRS/CSIC/CAS/Max Planck-style institute systems,
+        ministries and their research arms, research councils.
+    - id: company
+      label: Companies and industrial research
+      target: 200
+      pilot: 5
+      inclusion: >
+        Corporate R&D affiliations, including subsidiaries and country
+        offices of multinationals, and startups unlikely to be in ROR.
+    - id: multi_affiliation
+      label: Multi-affiliation strings
+      target: 200
+      pilot: 5
+      inclusion: >
+        One author, one field, two or more institutions in a single string.
+        Gold label is the full ROR set; partial assignment is scored as
+        multi-affiliation collapse, not as success.
+    - id: colliding_department
+      label: Department / institute names that collide across institutions
+      target: 200
+      pilot: 5
+      inclusion: >
+        Strings led by a department or institute whose name occurs at many
+        institutions (Institute of Physics, School of Public Health), with
+        weak or absent parent-institution cues.
+    - id: renamed_merged_split
+      label: Recently renamed, merged, or split institutions
+      target: 200
+      pilot: 5
+      inclusion: >
+        Institutions with a ROR-recorded name change, merger, or split
+        since 2015; strings sampled from both before and after the change.
+    - id: underrepresented_small
+      label: Small institutions in under-represented countries
+      target: 200
+      pilot: 5
+      inclusion: >
+        Institutions in sub-Saharan Africa, Central Asia, Pacific, and
+        Caribbean, excluding the handful of large flagship universities
+        that international sources already cover well.
+      sub_quotas:
+        sub_saharan_africa: 80
+        central_asia: 40
+        pacific: 40
+        caribbean: 40
+
+benchmark_b:
+  name: author-disambiguation
+  unit: ORCID record (researcher) with >= 10 self-asserted works
+  total_target: 1050
+  design: >
+    Two primary quota dimensions where failure is expected to concentrate:
+    name commonality x mobility, 15 cells, 70 records per cell. Script,
+    career stage, and discipline are recorded covariates with minimum
+    coverage floors, not quota cells; a full five-way cross would need
+    cells too small to hold a confidence interval.
+  quota_dimensions:
+    name_commonality:
+      basis: >
+        Frequency of (family name, first initial) in the pooled author
+        corpus, bucketed on the empirical distribution built in Phase 1
+        before any evaluation. Bucket edges frozen with the gold standard.
+      buckets: [very_rare, rare, medium, common, very_common]
+    mobility:
+      basis: Distinct institutions in the ORCID employment history.
+      buckets: ["1", "2-3", "4+"]
+  covariate_floors:
+    non_latin_name_script: 150 # min records whose name is non-Latin at source
+    first_publication_pre_2000: 150 # senior researchers
+    first_publication_post_2015: 150 # early career
+    non_stem_discipline: 150
+  ground_truth_filter: >
+    Works on the ORCID record whose ORCID 'source' is the record holder
+    themselves (source client-id absent and source-orcid == record ORCID).
+    Works added by any member client (Crossref Metadata Search, Scopus,
+    ResearcherID, DataCite, publisher integrations, and every source under
+    evaluation) are excluded from ground truth to avoid circularity. The
+    exact filter and its counts are published in METHODS.md.
