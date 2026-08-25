@@ -85,6 +85,18 @@ def looks_multi_affiliation(text: str) -> bool:
     return len(institution_tokens) >= 2 and separators >= 1
 
 
+def contains_normalized(text: str, needle: str) -> bool:
+    """Case- and diacritic-insensitive substring test, so a search hit for
+    'Universite Pierre et Marie Curie' matches 'Université Pierre-et-Marie-…'."""
+
+    def normalize(value: str) -> str:
+        decomposed = unicodedata.normalize("NFKD", value.casefold())
+        stripped = "".join(ch for ch in decomposed if not unicodedata.combining(ch))
+        return re.sub(r"[^a-z0-9]+", " ", stripped).strip()
+
+    return normalize(needle) in normalize(text)
+
+
 def token_signals(text: str) -> dict[str, bool]:
     return {
         "hospital": bool(_HOSPITAL_TOKENS.search(text)),

@@ -75,3 +75,14 @@ def test_government_and_company_tokens() -> None:
     assert token_signals("National Institute of Standards and Technology")["government"]
     assert token_signals("Pfizer Inc., Groton, CT")["company"]
     assert not token_signals("University of Leeds")["company"]
+
+
+def test_contains_normalized_ignores_case_and_diacritics() -> None:
+    from disambig.signals import contains_normalized
+
+    assert contains_normalized(
+        "Institut des Systèmes, Université Pierre-et-Marie-Curie - CNRS",
+        "Universite Pierre et Marie Curie",
+    )
+    assert contains_normalized("UNIVERSITÉ PARIS DIDEROT", "paris diderot")
+    assert not contains_normalized("Sorbonne Université, Paris", "Paris Diderot")

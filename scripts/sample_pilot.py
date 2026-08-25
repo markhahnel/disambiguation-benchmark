@@ -1,17 +1,26 @@
 """Draw the 50-item pilot sample (5 per stratum) for Benchmark A.
 
 PILOT-ONLY SHORTCUT, FLAGGED: this sampler draws from OpenAlex because it is
-the fastest frame to stand up. Several strata are routed using OpenAlex's own
-institution resolution (country and type filters), which oversamples strings
-OpenAlex could already resolve and would flatter OpenAlex if reused for the
-real frame. The production frame (Phase 1) samples raw strings from
-Crossref + PubMed and routes with string-level heuristics only. See
-METHODS.md section 3 before trusting anything drawn here beyond the pilot.
+the fastest frame to stand up. Filter-based strata are routed using
+OpenAlex's own institution resolution, at the authorship level: a sampled
+string must come from the specific author whose resolved institution matched
+the country or type filter, not merely from a work where any author matched
+(the first pilot draw showed work-level matching contaminates strata badly).
+Routing via OpenAlex resolution oversamples strings OpenAlex could already
+resolve and would flatter OpenAlex if reused for the real frame. The
+production frame (Phase 1) samples raw strings from Crossref + PubMed and
+routes with string-level heuristics only. See METHODS.md section 2.
 
 The renamed_merged_split stratum uses a curated seed list of predecessor
 names (recent French mergers dominate because they are the canonical recent
 cases); Phase 1 builds this stratum from ROR dump predecessor/successor
-relationships instead.
+relationships instead. Search-based strata require the sampled string to
+actually contain the search term (case- and diacritic-insensitive), because
+OpenAlex search matches at work level and stems tokens.
+
+non_latin_script is sampled from works filtered by original language, which
+the first pilot draw showed is the only route that surfaces non-romanised
+strings in OpenAlex at a usable rate (5-20% of strings, script-dependent).
 
 Usage:
   uv run scripts/sample_pilot.py --out data/interim/pilot_items.jsonl
@@ -25,6 +34,7 @@ import hashlib
 import json
 import random
 import sys
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -41,6 +51,7 @@ from disambig.httpcache import CachingClient  # noqa: E402
 from disambig.logging_setup import configure_logging, new_run_id  # noqa: E402
 from disambig.models import Item, PublicationContext  # noqa: E402
 from disambig.signals import (  # noqa: E402
+    contains_normalized,
     dominant_non_latin_script,
     looks_multi_affiliation,
     token_signals,
@@ -53,10 +64,15 @@ PILOT_PER_STRATUM = 5
 SAMPLE_SIZE = 100  # works fetched per query before client-side routing
 RANDOM_SEED = 20260824
 
-UNDERREP_COUNTRIES = (
-    "ug|tz|sn|ml|bf|bw|zm|mw|rw|bj|kz|uz|kg|tj|fj|pg|ws|to|sb|jm|tt|bb|gy|ht"
+ANGLO_CC = frozenset({"US", "GB", "CA", "AU", "NZ", "IE"})
+NON_LATIN_CC = frozenset({"CN", "JP", "KR", "RU", "EG", "SA", "IR", "TH", "TW"})
+UNDERREP_CC = frozenset(
+    ["UG", "TZ", "SN", "ML", "BF", "BW", "ZM", "MW", "RW", "BJ", "KZ", "UZ",
+     "KG", "TJ", "FJ", "PG", "WS", "TO", "SB", "JM", "TT", "BB", "GY", "HT"]
 )
-NON_LATIN_COUNTRIES = "cn|jp|kr|ru|eg|sa|th"
+NON_LATIN_LANGS = [
+    ("zh", "cn"), ("ja", "jp"), ("ko", "kr"), ("ru", "ru"), ("ar", "eg|sa"), ("th", "th")
+]
 
 COLLIDING_DEPT_QUERIES = [
     "Institute of Physics",
@@ -83,60 +99,109 @@ def latin_university(text: str) -> bool:
     )
 
 
+def authorship_country_in(codes: frozenset[str]) -> Callable[[dict[str, Any]], bool]:
+    def check(authorship: dict[str, Any]) -> bool:
+        for inst in authorship.get("institutions") or []:
+            if isinstance(inst, dict) and inst.get("country_code") in codes:
+                return True
+        return False
+
+    return check
+
+
+def authorship_type_is(*types: str) -> Callable[[dict[str, Any]], bool]:
+    wanted = set(types)
+    def check(authorship: dict[str, Any]) -> bool:
+        for inst in authorship.get("institutions") or []:
+            if isinstance(inst, dict) and inst.get("type") in wanted:
+                return True
+        return False
+
+    return check
+
+
+def any_authorship(_: dict[str, Any]) -> bool:
+    return True
+
+
+@dataclass
+class Query:
+    url: str
+    required_term: str | None = None  # sampled string must contain this
+
+
 @dataclass
 class Strategy:
     stratum: str
-    queries: list[str]  # OpenAlex /works query strings (joined filters etc.)
-    predicate: Any  # str -> bool on the raw affiliation string
-    sub_stratum_fn: Any = None  # optional str -> str | None
+    queries: list[Query]
+    predicate: Callable[[str], bool]
+    authorship_filter: Callable[[dict[str, Any]], bool] = any_authorship
+    sub_stratum_fn: Callable[[str], str | None] | None = None
+    prefer_distinct_sub_strata: bool = False
+
+
+def works_filter(filt: str) -> str:
+    return (
+        f"{OPENALEX}/works?filter={filt}"
+        f"&sample={SAMPLE_SIZE}&seed={RANDOM_SEED}&per-page={SAMPLE_SIZE}"
+    )
+
+
+def raw_search(query: str) -> Query:
+    return Query(
+        url=works_filter(f"raw_affiliation_strings.search:{quote(query)}"),
+        required_term=query,
+    )
 
 
 def strategies() -> list[Strategy]:
-    def works_filter(filt: str) -> str:
-        return (
-            f"{OPENALEX}/works?filter={filt}"
-            f"&sample={SAMPLE_SIZE}&seed={RANDOM_SEED}&per-page={SAMPLE_SIZE}"
-        )
-
-    def raw_search(query: str) -> str:
-        return works_filter(f"raw_affiliation_strings.search:{quote(query)}")
-
     return [
         Strategy(
             "anglophone_university",
-            [works_filter("authorships.institutions.country_code:us|gb|ca|au|nz|ie,"
-                          "authorships.institutions.type:education")],
+            [Query(works_filter(
+                "authorships.institutions.country_code:us|gb|ca|au|nz|ie,"
+                "authorships.institutions.type:education"))],
             latin_university,
+            authorship_filter=authorship_country_in(ANGLO_CC),
         ),
         Strategy(
             "non_latin_script",
-            [works_filter(f"authorships.institutions.country_code:{NON_LATIN_COUNTRIES}")],
+            [Query(works_filter(
+                f"language:{lang},authorships.institutions.country_code:{cc}"))
+             for lang, cc in NON_LATIN_LANGS],
             lambda s: dominant_non_latin_script(s) is not None,
             sub_stratum_fn=dominant_non_latin_script,
+            prefer_distinct_sub_strata=True,
         ),
         Strategy(
             "transliterated",
-            [works_filter(f"authorships.institutions.country_code:{NON_LATIN_COUNTRIES}")],
+            [Query(works_filter(
+                "authorships.institutions.country_code:cn|jp|kr|ru|ir|th"))],
             lambda s: dominant_non_latin_script(s) is None and len(s) > 20,
+            authorship_filter=authorship_country_in(NON_LATIN_CC),
         ),
         Strategy(
             "hospital_medical",
-            [works_filter("authorships.institutions.type:healthcare")],
+            [Query(works_filter("authorships.institutions.type:healthcare"))],
             lambda s: token_signals(s)["hospital"],
+            authorship_filter=authorship_type_is("healthcare"),
         ),
         Strategy(
             "government_lab",
-            [works_filter("authorships.institutions.type:government|facility")],
-            lambda s: dominant_non_latin_script(s) is None or True,
+            [Query(works_filter("authorships.institutions.type:government|facility"))],
+            lambda s: len(s) > 10,
+            authorship_filter=authorship_type_is("government", "facility"),
         ),
         Strategy(
             "company",
-            [works_filter("authorships.institutions.type:company")],
+            [Query(works_filter("authorships.institutions.type:company"))],
             lambda s: len(s) > 5,
+            authorship_filter=authorship_type_is("company"),
         ),
         Strategy(
             "multi_affiliation",
-            [works_filter("authorships.institutions.country_code:us|de|cn|br|in|jp")],
+            [Query(works_filter(
+                "authorships.institutions.country_code:us|de|cn|br|in|jp"))],
             looks_multi_affiliation,
         ),
         Strategy(
@@ -151,8 +216,11 @@ def strategies() -> list[Strategy]:
         ),
         Strategy(
             "underrepresented_small",
-            [works_filter(f"authorships.institutions.country_code:{UNDERREP_COUNTRIES}")],
+            [Query(works_filter(
+                "authorships.institutions.country_code:"
+                "ug|tz|sn|ml|bf|bw|zm|mw|rw|bj|kz|uz|kg|tj|fj|pg|ws|to|sb|jm|tt|bb|gy|ht"))],
             lambda s: len(s) > 5,
+            authorship_filter=authorship_country_in(UNDERREP_CC),
         ),
     ]
 
@@ -173,8 +241,10 @@ def pin_snapshot_date() -> str:
     return str(config["pilot_snapshot_date"])
 
 
-def extract_instances(work: dict[str, Any]) -> list[tuple[str, PublicationContext]]:
-    """(raw string, context) per author, defensively parsed."""
+def extract_instances(
+    work: dict[str, Any], authorship_filter: Callable[[dict[str, Any]], bool]
+) -> list[tuple[str, PublicationContext]]:
+    """(raw string, context) per author whose authorship passes the filter."""
     instances: list[tuple[str, PublicationContext]] = []
     authorships = work.get("authorships")
     if not isinstance(authorships, list):
@@ -192,7 +262,7 @@ def extract_instances(work: dict[str, Any]) -> list[tuple[str, PublicationContex
         if isinstance(source, dict):
             venue = source.get("display_name")
     for authorship in authorships:
-        if not isinstance(authorship, dict):
+        if not isinstance(authorship, dict) or not authorship_filter(authorship):
             continue
         author = authorship.get("author")
         author_name = author.get("display_name") if isinstance(author, dict) else None
@@ -212,6 +282,29 @@ def extract_instances(work: dict[str, Any]) -> list[tuple[str, PublicationContex
             )
             instances.append((raw, context))
     return instances
+
+
+def select_with_spread(
+    candidates: list[Item], quota: int, rng: random.Random, prefer_distinct: bool
+) -> list[Item]:
+    """Take up to quota items; optionally spread across sub_strata first."""
+    rng.shuffle(candidates)
+    if not prefer_distinct:
+        return candidates[:quota]
+    chosen: list[Item] = []
+    seen_subs: set[str | None] = set()
+    for item in candidates:
+        if len(chosen) >= quota:
+            return chosen
+        if item.sub_stratum not in seen_subs:
+            chosen.append(item)
+            seen_subs.add(item.sub_stratum)
+    for item in candidates:
+        if len(chosen) >= quota:
+            break
+        if item not in chosen:
+            chosen.append(item)
+    return chosen
 
 
 def main() -> None:
@@ -239,10 +332,9 @@ def main() -> None:
     items: list[Item] = []
 
     for strategy in strategies():
-        picked = 0
         candidates: list[Item] = []
-        for query_url in strategy.queries:
-            url = f"{query_url}&mailto={quote(mailto)}"
+        for query in strategy.queries:
+            url = f"{query.url}&mailto={quote(mailto)}"
             response = http.get(url, refresh=args.refresh)
             if response.status != 200:
                 raise RuntimeError(f"OpenAlex query failed ({response.status}): {url}")
@@ -257,14 +349,16 @@ def main() -> None:
             for work in works:
                 if not isinstance(work, dict):
                     continue
-                work_instances = extract_instances(work)
+                work_instances = extract_instances(work, strategy.authorship_filter)
                 rng.shuffle(work_instances)
                 for raw, context in work_instances:
                     if raw in seen_strings or not strategy.predicate(raw):
                         continue
-                    item_id = hashlib.sha256(
-                        f"{context.doi}|{raw}".encode()
-                    ).hexdigest()[:16]
+                    if query.required_term is not None and not contains_normalized(
+                        raw, query.required_term
+                    ):
+                        continue
+                    item_id = hashlib.sha256(f"{context.doi}|{raw}".encode()).hexdigest()[:16]
                     sub = strategy.sub_stratum_fn(raw) if strategy.sub_stratum_fn else None
                     candidates.append(
                         Item(
@@ -278,19 +372,19 @@ def main() -> None:
                     )
                     seen_strings.add(raw)
                     break  # at most one instance per work, to avoid clustering
-        rng.shuffle(candidates)
-        chosen = candidates[:PILOT_PER_STRATUM]
-        picked = len(chosen)
+        chosen = select_with_spread(
+            candidates, PILOT_PER_STRATUM, rng, strategy.prefer_distinct_sub_strata
+        )
         items.extend(chosen)
         log.info(
             "stratum_sampled",
             stratum=strategy.stratum,
             eligible=len(candidates),
-            picked=picked,
-            shortfall=PILOT_PER_STRATUM - picked,
+            picked=len(chosen),
+            shortfall=PILOT_PER_STRATUM - len(chosen),
         )
-        if picked < PILOT_PER_STRATUM:
-            log.warning("stratum_shortfall", stratum=strategy.stratum, picked=picked)
+        if len(chosen) < PILOT_PER_STRATUM:
+            log.warning("stratum_shortfall", stratum=strategy.stratum, picked=len(chosen))
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w") as out:
