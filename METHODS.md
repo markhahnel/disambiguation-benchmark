@@ -43,16 +43,66 @@ corpus coverage as such, and we say so in the post.
 A large share of apparent errors are hierarchy choices, not errors: a
 hospital that is a ROR child of a university, an institute inside a national
 research council. Every result is therefore computed and published under
-three rules, with no primary rule declared:
+three rules, with no primary rule declared. Hierarchy edges are **one hop**,
+by definition, over the relationship edges in the pinned ROR release:
 
 1. **Exact**: assigned ROR ID equals gold ROR ID.
-2. **Parent-child**: exact, or the assigned ID is a direct parent or child
-   of the gold ID in the pinned ROR release.
-3. **Any-relationship**: exact, or any relationship path links the two in
-   the pinned ROR release.
+2. **Parent-child**: exact, or one direct parent or child edge joins the
+   assigned ID and the gold ID, in either direction.
+3. **Any-relationship**: exact, or one direct parent, child or related edge
+   joins them in either direction, or one ID is a predecessor or successor
+   of the other along the ROR succession chain, of any length.
+
+Succession is the one place a chain is followed: a sequence of renames and
+mergers is a single institution's identity over time, the edges are directed
+and short, and nothing degenerate can happen. Hierarchy and "related" edges
+are never chained.
+
+Transitive closure is deliberately not a headline rule. Closure over ROR's
+"related" edges is degenerate: it would eventually connect most of a national
+academy's estate and make the most permissive rule meaningless, while
+quietly flattering whichever source assigns parent organisations. Ancestry
+distance (shortest monotone path over parent and child edges only, to a
+maximum depth) is computed as a separate sensitivity diagnostic instead. ROR
+does not assert every edge from both ends, so every rule consults the edges
+recorded on both the assigned and the gold record.
 
 The ranking of sources can flip between rules. That sensitivity is itself a
 published figure, not a footnote.
+
+**Identifiers.** Every ROR ID on every side of every comparison (gold label,
+source assignment, relationship target) passes through one normaliser
+(`src/disambig/ror_ids.py`). Formatting differences are not disambiguation
+errors. Any other identifier scheme a source emits (GRID, ISNI, Wikidata,
+FundRef) is crosswalked to ROR through one shared index built from the pinned
+dump's `external_ids` and applied identically to every source at harvest.
+Where one external identifier maps to more than one ROR record (the pinned
+release has several hundred such pairs, mostly ISNI and Wikidata), the
+crosswalk yields no assignment, for every source alike, and the count of
+such cases is published. There is no per-source normalisation step anywhere.
+
+**Outcomes.** For each item and each rule the scorer records one outcome:
+`correct`, `collapsed` (every assigned ID grounded, but the gold set is
+larger: the multi-affiliation collapse), `over_assigned`, `stale` (no
+assigned ID grounded, and every assigned ID is a predecessor, through any
+length of successor chain, of a gold ID: a renamed or merged institution
+reported under its old identifier), `partial`, `wrong`, `no_assignment`,
+`gold_ambiguous`, and `gold_no_ror`. The last three carry no element counts:
+an abstention is a **coverage** failure and is reported alongside accuracy,
+never folded into recall, and ambiguous or no-ROR gold items are reported as
+their own rates. The pairwise relation between each assigned and gold ID is
+recorded independently of the rule, so the error taxonomy is tabulated once,
+not once per rule.
+
+**Pending gate decisions**, implemented one way for now and listed here so
+they are not mistaken for settled design: whether rule 3 should exclude
+predecessor and successor edges so that stale IDs stay a visible error under
+all three rules (currently they count as hits under rule 3); whether an
+assignment made against a `no_ror` gold item counts as a precision failure
+(currently reported as its own rate only); whether `over_assigned` counts as
+a hit under the hierarchy rules (currently it does not, and the extra IDs
+count as false positives); and the reporting depth of the ancestry
+diagnostic.
 
 ### Sampling frame and strata
 
@@ -180,7 +230,13 @@ because a source that assigns nothing is 100% precise and useless.
 ## 6. What would change the answer
 
 - A different ROR release: renamed and merged institutions move under you.
-  The ROR data dump version is pinned and recorded in every findings entry.
+  The ROR data dump is pinned to one Zenodo release in `config/ror_dump.yaml`
+  (version, DOI, SHA-256 of the archive and of the extracted JSON), that
+  directory is folded into the snapshot hash every finding cites, and every
+  institutional-benchmark finding carries the release version explicitly.
+  Gold labels can only be assigned to IDs present in the pinned release: the
+  review UI refuses anything else, so a gold standard can never reference an
+  organisation the scorer cannot see.
 - The hierarchy matching rule: which is why all three are published.
 - The intersection frame: excluding works missing from any source shrinks
   and skews the frame towards well-covered literature. Coverage against the

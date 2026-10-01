@@ -67,10 +67,15 @@ correctable artefact.
 ## 7. ROR version drift
 
 Institutions are renamed, merged, split, and added between ROR releases. All
-matching runs against one pinned ROR data dump version, recorded in every
-findings entry. Results under a different ROR release will differ, most for
-the renamed/merged/split stratum, which is partly the point of having that
-stratum.
+matching runs against one pinned ROR data dump release, recorded with its
+DOI and hashes in `config/ror_dump.yaml` and carried on every institutional
+finding. Results under a different ROR release will differ, most for the
+renamed/merged/split stratum, which is partly the point of having that
+stratum. A consequence of pinning: an organisation added to ROR after the
+pinned release date cannot be a gold label at all (the review UI refuses
+IDs outside the release), so such instances can only be labelled `no_ror`
+or `ambiguous`. That slightly under-states what the live registry could
+resolve, identically for every source.
 
 ## 8. Stratum routing heuristics are imperfect
 

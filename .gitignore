@@ -6,7 +6,9 @@ __pycache__/
 .ruff_cache/
 config/.env
 data/interim/http_cache.sqlite
+data/raw/ror/
 data/interim/review.sqlite
 data/demo/demo_review.sqlite
 logs/*.jsonl
 .DS_Store
+outputs/figures/_*/

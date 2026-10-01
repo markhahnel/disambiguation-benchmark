@@ -1,0 +1,15 @@
+version: v2.13
+zenodo_doi: 10.5281/zenodo.22902037
+zenodo_concept_doi: 10.5281/zenodo.6347574
+record_id: 22902037
+publication_date: '2026-09-22'
+filename: v2.13-2026-09-22-ror-data.zip
+size_bytes: 37540961
+md5_zenodo: a935217de21e7983b977f5419f1a6b20
+sha256_zip: 476988542f1bdd185f779386f90149371f58cb4ebdba326db3b7b428a468d4a5
+v2_json_filename: v2.13-2026-09-22-ror-data.json
+sha256_v2_json: 6d032ff473f771e015da0837fe28b881a8f85822ee7815effefe11dc49c4346c
+organisation_count: 141528
+downloaded_at: '2026-10-01T13:55:16.640169+00:00'
+source_url: https://zenodo.org/api/records/22902037/files/v2.13-2026-09-22-ror-data.zip/content
+listing_url: https://zenodo.org/api/records?q=parent.id:6347574&sort=newest&all_versions=true&size=25&page=1

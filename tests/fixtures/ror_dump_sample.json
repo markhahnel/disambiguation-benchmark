@@ -1,0 +1,1622 @@
+[
+    {
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2026-09-22",
+                "schema_version": "2.1"
+            }
+        },
+        "domains": [
+            "ox.ac.uk"
+        ],
+        "established": 1096,
+        "external_ids": [
+            {
+                "all": [
+                    "501100000769",
+                    "100010354",
+                    "100010355",
+                    "100010353",
+                    "100010357",
+                    "100010362",
+                    "100010365",
+                    "100010363",
+                    "100010358",
+                    "100010356",
+                    "100010361",
+                    "100010360",
+                    "100010368",
+                    "100010370",
+                    "100010369",
+                    "100010364",
+                    "100010348",
+                    "100010347",
+                    "100010350",
+                    "100010351",
+                    "100010352",
+                    "100010371",
+                    "100010349",
+                    "100010367",
+                    "501100004211",
+                    "501100004789",
+                    "100007718",
+                    "501100000524",
+                    "501100000645",
+                    "501100000666",
+                    "501100000696",
+                    "501100000718",
+                    "501100000719",
+                    "501100000728",
+                    "501100000744",
+                    "501100000747",
+                    "501100001622",
+                    "501100000649",
+                    "501100000734",
+                    "501100006561",
+                    "100007724",
+                    "501100006558",
+                    "501100022752",
+                    "501100014748",
+                    "501100013389",
+                    "100010359",
+                    "100010366",
+                    "100013964",
+                    "501100015505",
+                    "501100021079",
+                    "501100023929",
+                    "501100024811",
+                    "501100025495"
+                ],
+                "preferred": "501100000769",
+                "type": "fundref"
+            },
+            {
+                "all": [
+                    "grid.4991.5"
+                ],
+                "preferred": "grid.4991.5",
+                "type": "grid"
+            },
+            {
+                "all": [
+                    "0000 0004 1936 8948"
+                ],
+                "preferred": null,
+                "type": "isni"
+            },
+            {
+                "all": [
+                    "Q34433",
+                    "Q5260389",
+                    "Q56612600",
+                    "Q7529574",
+                    "Q6786826",
+                    "Q1095537"
+                ],
+                "preferred": "Q34433",
+                "type": "wikidata"
+            }
+        ],
+        "id": "https://ror.org/052gg0110",
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.ox.ac.uk"
+            },
+            {
+                "type": "wikipedia",
+                "value": "http://en.wikipedia.org/wiki/University_of_Oxford"
+            }
+        ],
+        "locations": [
+            {
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "GB",
+                    "country_name": "United Kingdom",
+                    "country_subdivision_code": "ENG",
+                    "country_subdivision_name": "England",
+                    "lat": 51.75222,
+                    "lng": -1.25596,
+                    "name": "Oxford"
+                },
+                "geonames_id": 2640729
+            }
+        ],
+        "names": [
+            {
+                "lang": "en",
+                "types": [
+                    "alias"
+                ],
+                "value": "Oxford University"
+            },
+            {
+                "lang": "cy",
+                "types": [
+                    "label"
+                ],
+                "value": "Prifysgol Rhydychen"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "value": "University of Oxford"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "CRUK/MRC Oxford Institute for Radiation Oncology",
+                "type": "child",
+                "id": "https://ror.org/011hz4254"
+            },
+            {
+                "label": "Cancer Research UK Oxford Centre",
+                "type": "child",
+                "id": "https://ror.org/05kgg0s20"
+            },
+            {
+                "label": "Centre for the Observation and Modelling of Earthquakes, Volcanoes and Tectonics",
+                "type": "child",
+                "id": "https://ror.org/047d2d387"
+            },
+            {
+                "label": "MRC Brain Network Dynamics Unit",
+                "type": "child",
+                "id": "https://ror.org/01tfjyv98"
+            },
+            {
+                "label": "MRC Human Immunology Unit",
+                "type": "child",
+                "id": "https://ror.org/02kcpr174"
+            },
+            {
+                "label": "MRC Weatherall Institute of Molecular Medicine",
+                "type": "child",
+                "id": "https://ror.org/01q496a73"
+            },
+            {
+                "label": "Mahidol Oxford Tropical Medicine Research Unit",
+                "type": "child",
+                "id": "https://ror.org/03fs9z545"
+            },
+            {
+                "label": "Medawar Building for Pathogen Research",
+                "type": "child",
+                "id": "https://ror.org/017g85521"
+            },
+            {
+                "label": "Oxford Centre for Diabetes, Endocrinology and Metabolism",
+                "type": "child",
+                "id": "https://ror.org/03myafa32"
+            },
+            {
+                "label": "Oxford University Clinical Research Unit",
+                "type": "child",
+                "id": "https://ror.org/05rehad94"
+            },
+            {
+                "label": "Oxford University Press (United Kingdom)",
+                "type": "child",
+                "id": "https://ror.org/0336mm561"
+            },
+            {
+                "label": "Wellcome Centre for Ethics and Humanities",
+                "type": "child",
+                "id": "https://ror.org/05crdvn36"
+            },
+            {
+                "label": "Centre for Human Genetics",
+                "type": "child",
+                "id": "https://ror.org/01rjnta51"
+            },
+            {
+                "label": "Wellcome Centre for Integrative Neuroimaging",
+                "type": "child",
+                "id": "https://ror.org/0172mzb45"
+            },
+            {
+                "label": "MRC Population Health Research Unit",
+                "type": "child",
+                "id": "https://ror.org/01p4s0142"
+            },
+            {
+                "label": "MRC Molecular Haematology Unit",
+                "type": "child",
+                "id": "https://ror.org/02khxwt12"
+            },
+            {
+                "label": "John Adams Institute for Accelerator Science",
+                "type": "child",
+                "id": "https://ror.org/00wgpgb78"
+            },
+            {
+                "label": "MRC Centre of Research Excellence in Restorative Neural Dynamics",
+                "type": "child",
+                "id": "https://ror.org/01fj67v51"
+            },
+            {
+                "label": "Kennedy Institute of Rheumatology",
+                "type": "child",
+                "id": "https://ror.org/01ahsqc77"
+            },
+            {
+                "label": "Churchill Hospital",
+                "type": "related",
+                "id": "https://ror.org/009vheq40"
+            },
+            {
+                "label": "John Radcliffe Hospital",
+                "type": "related",
+                "id": "https://ror.org/0080acb59"
+            },
+            {
+                "label": "Mahosot Hospital",
+                "type": "related",
+                "id": "https://ror.org/01qcxb695"
+            },
+            {
+                "label": "NIHR Oxford Biomedical Research Centre",
+                "type": "related",
+                "id": "https://ror.org/00aps1a34"
+            },
+            {
+                "label": "Oxford Health NHS Foundation Trust",
+                "type": "related",
+                "id": "https://ror.org/04c8bjx39"
+            },
+            {
+                "label": "Warneford Hospital",
+                "type": "related",
+                "id": "https://ror.org/03we1zb10"
+            },
+            {
+                "label": "UK Web Archive",
+                "type": "related",
+                "id": "https://ror.org/00gnxy738"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "education",
+            "funder"
+        ]
+    },
+    {
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2026-09-22",
+                "schema_version": "2.1"
+            }
+        },
+        "domains": [
+            "ouh.nhs.uk"
+        ],
+        "established": 2011,
+        "external_ids": [
+            {
+                "all": [
+                    "501100006149"
+                ],
+                "preferred": null,
+                "type": "fundref"
+            },
+            {
+                "all": [
+                    "grid.410556.3"
+                ],
+                "preferred": "grid.410556.3",
+                "type": "grid"
+            },
+            {
+                "all": [
+                    "0000 0001 0440 1440"
+                ],
+                "preferred": null,
+                "type": "isni"
+            },
+            {
+                "all": [
+                    "Q16976147"
+                ],
+                "preferred": null,
+                "type": "wikidata"
+            }
+        ],
+        "id": "https://ror.org/03h2bh287",
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.ouh.nhs.uk/"
+            },
+            {
+                "type": "wikipedia",
+                "value": "https://en.wikipedia.org/wiki/Oxford_University_Hospitals_NHS_Foundation_Trust"
+            }
+        ],
+        "locations": [
+            {
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "GB",
+                    "country_name": "United Kingdom",
+                    "country_subdivision_code": "ENG",
+                    "country_subdivision_name": "England",
+                    "lat": 51.75222,
+                    "lng": -1.25596,
+                    "name": "Oxford"
+                },
+                "geonames_id": 2640729
+            }
+        ],
+        "names": [
+            {
+                "lang": "en",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "value": "Oxford University Hospitals NHS Trust"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Cancer Research UK Oxford Centre",
+                "type": "child",
+                "id": "https://ror.org/05kgg0s20"
+            },
+            {
+                "label": "Churchill Hospital",
+                "type": "child",
+                "id": "https://ror.org/009vheq40"
+            },
+            {
+                "label": "Faringdon Day Hospital",
+                "type": "child",
+                "id": "https://ror.org/02pj4bp80"
+            },
+            {
+                "label": "Horton General Hospital",
+                "type": "child",
+                "id": "https://ror.org/03zeg3732"
+            },
+            {
+                "label": "John Radcliffe Hospital",
+                "type": "child",
+                "id": "https://ror.org/0080acb59"
+            },
+            {
+                "label": "NIHR Oxford Biomedical Research Centre",
+                "type": "child",
+                "id": "https://ror.org/00aps1a34"
+            },
+            {
+                "label": "Nuffield Orthopaedic Centre",
+                "type": "child",
+                "id": "https://ror.org/0036ate90"
+            },
+            {
+                "label": "Oxford Centre for Diabetes, Endocrinology and Metabolism",
+                "type": "child",
+                "id": "https://ror.org/03myafa32"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "funder",
+            "healthcare"
+        ]
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 2640729,
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "GB",
+                    "country_name": "United Kingdom",
+                    "country_subdivision_code": "ENG",
+                    "country_subdivision_name": "England",
+                    "lat": 51.75222,
+                    "lng": -1.25596,
+                    "name": "Oxford"
+                }
+            }
+        ],
+        "established": 1973,
+        "external_ids": [
+            {
+                "type": "grid",
+                "all": [
+                    "grid.8348.7"
+                ],
+                "preferred": "grid.8348.7"
+            },
+            {
+                "type": "isni",
+                "all": [
+                    "0000 0001 2306 7492"
+                ],
+                "preferred": null
+            },
+            {
+                "type": "wikidata",
+                "all": [
+                    "Q6254080"
+                ],
+                "preferred": null
+            }
+        ],
+        "id": "https://ror.org/0080acb59",
+        "domains": [],
+        "links": [
+            {
+                "type": "website",
+                "value": "http://www.ouh.nhs.uk/hospitals/jr/default.aspx"
+            },
+            {
+                "type": "wikipedia",
+                "value": "https://en.wikipedia.org/wiki/John_Radcliffe_Hospital"
+            }
+        ],
+        "names": [
+            {
+                "value": "JR",
+                "types": [
+                    "acronym"
+                ],
+                "lang": null
+            },
+            {
+                "value": "John Radcliffe Hospital",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            }
+        ],
+        "relationships": [
+            {
+                "type": "parent",
+                "label": "Northamptonshire Healthcare NHS Foundation Trust",
+                "id": "https://ror.org/0358tcd02"
+            },
+            {
+                "type": "parent",
+                "label": "Oxford University Hospitals NHS Trust",
+                "id": "https://ror.org/03h2bh287"
+            },
+            {
+                "type": "related",
+                "label": "Oxford Brookes University",
+                "id": "https://ror.org/04v2twj65"
+            },
+            {
+                "type": "related",
+                "label": "University of Oxford",
+                "id": "https://ror.org/052gg0110"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "healthcare"
+        ],
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2026-09-22",
+                "schema_version": "2.1"
+            }
+        },
+        "domains": [
+            "iphy.ac.cn"
+        ],
+        "established": 1950,
+        "external_ids": [
+            {
+                "all": [
+                    "grid.458438.6"
+                ],
+                "preferred": "grid.458438.6",
+                "type": "grid"
+            },
+            {
+                "all": [
+                    "0000 0004 0605 6806"
+                ],
+                "preferred": null,
+                "type": "isni"
+            },
+            {
+                "all": [
+                    "Q10874032"
+                ],
+                "preferred": null,
+                "type": "wikidata"
+            }
+        ],
+        "id": "https://ror.org/05cvf7v30",
+        "links": [
+            {
+                "type": "website",
+                "value": "http://english.iop.cas.cn"
+            }
+        ],
+        "locations": [
+            {
+                "geonames_details": {
+                    "continent_code": "AS",
+                    "continent_name": "Asia",
+                    "country_code": "CN",
+                    "country_name": "China",
+                    "country_subdivision_code": "BJ",
+                    "country_subdivision_name": "Beijing",
+                    "lat": 39.9075,
+                    "lng": 116.39723,
+                    "name": "Beijing"
+                },
+                "geonames_id": 1816670
+            }
+        ],
+        "names": [
+            {
+                "lang": null,
+                "types": [
+                    "acronym"
+                ],
+                "value": "IOP"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "alias"
+                ],
+                "value": "Institute of Applied Physics of the Chinese Academy of Sciences"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "value": "Institute of Physics"
+            },
+            {
+                "lang": "zh",
+                "types": [
+                    "label"
+                ],
+                "value": "\u4e2d\u56fd\u79d1\u5b66\u9662\u7269\u7406\u7814\u7a76\u6240"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "National Laboratory for Superconductivity",
+                "type": "child",
+                "id": "https://ror.org/05tekqt96"
+            },
+            {
+                "label": "Songshan Lake Materials Laboratory",
+                "type": "child",
+                "id": "https://ror.org/020vtf184"
+            },
+            {
+                "label": "State Key Laboratory of Magnetism",
+                "type": "child",
+                "id": "https://ror.org/04dshd728"
+            },
+            {
+                "label": "Chinese Academy of Sciences",
+                "type": "parent",
+                "id": "https://ror.org/034t30j35"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "facility"
+        ]
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 1858421,
+                "geonames_details": {
+                    "continent_code": "AS",
+                    "continent_name": "Asia",
+                    "country_code": "JP",
+                    "country_name": "Japan",
+                    "country_subdivision_code": "43",
+                    "country_subdivision_name": "Kumamoto",
+                    "lat": 32.80589,
+                    "lng": 130.69181,
+                    "name": "Kumamoto"
+                }
+            }
+        ],
+        "established": 1964,
+        "external_ids": [
+            {
+                "type": "grid",
+                "all": [
+                    "grid.411243.1"
+                ],
+                "preferred": "grid.411243.1"
+            },
+            {
+                "type": "isni",
+                "all": [
+                    "0000 0001 2112 6516"
+                ],
+                "preferred": null
+            },
+            {
+                "type": "wikidata",
+                "all": [
+                    "Q6452850"
+                ],
+                "preferred": null
+            }
+        ],
+        "id": "https://ror.org/00w0f8567",
+        "domains": [],
+        "links": [
+            {
+                "type": "website",
+                "value": "http://www.ktokai-u.ac.jp/"
+            },
+            {
+                "type": "wikipedia",
+                "value": "http://en.wikipedia.org/wiki/Kyushu_Tokai_University"
+            }
+        ],
+        "names": [
+            {
+                "value": "Kyushu Tokai University",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "Ky\u016bsh\u016b T\u014dkai Daigaku",
+                "types": [
+                    "alias"
+                ],
+                "lang": null
+            },
+            {
+                "value": "\u4e5d\u5dde\u6771\u6d77\u5927\u5b66",
+                "types": [
+                    "label"
+                ],
+                "lang": "ja"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Tokai University",
+                "type": "successor",
+                "id": "https://ror.org/01p7qe739"
+            }
+        ],
+        "status": "inactive",
+        "types": [
+            "education"
+        ],
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2026-09-22",
+                "schema_version": "2.1"
+            }
+        },
+        "domains": [
+            "tokai.ac.jp"
+        ],
+        "established": 1942,
+        "external_ids": [
+            {
+                "all": [
+                    "501100010655",
+                    "501100010656"
+                ],
+                "preferred": "501100010655",
+                "type": "fundref"
+            },
+            {
+                "all": [
+                    "grid.265061.6"
+                ],
+                "preferred": "grid.265061.6",
+                "type": "grid"
+            },
+            {
+                "all": [
+                    "0000 0001 1516 6626"
+                ],
+                "preferred": null,
+                "type": "isni"
+            },
+            {
+                "all": [
+                    "Q963709"
+                ],
+                "preferred": null,
+                "type": "wikidata"
+            }
+        ],
+        "id": "https://ror.org/01p7qe739",
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.u-tokai.ac.jp"
+            },
+            {
+                "type": "wikipedia",
+                "value": "http://en.wikipedia.org/wiki/Tokai_University"
+            }
+        ],
+        "locations": [
+            {
+                "geonames_details": {
+                    "continent_code": "AS",
+                    "continent_name": "Asia",
+                    "country_code": "JP",
+                    "country_name": "Japan",
+                    "country_subdivision_code": "13",
+                    "country_subdivision_name": "Tokyo",
+                    "lat": 35.6895,
+                    "lng": 139.69171,
+                    "name": "Tokyo"
+                },
+                "geonames_id": 1850147
+            }
+        ],
+        "names": [
+            {
+                "lang": "en",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "value": "Tokai University"
+            },
+            {
+                "lang": null,
+                "types": [
+                    "alias"
+                ],
+                "value": "T\u014dkai Daigaku"
+            },
+            {
+                "lang": "ja",
+                "types": [
+                    "label"
+                ],
+                "value": "\u6771\u6d77\u5927\u5b66"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Tokai University Hachioji Hospital",
+                "type": "related",
+                "id": "https://ror.org/00gr1q288"
+            },
+            {
+                "label": "Tokai University Hospital",
+                "type": "related",
+                "id": "https://ror.org/01gvmn480"
+            },
+            {
+                "label": "Tokai University Tokyo Hospital",
+                "type": "related",
+                "id": "https://ror.org/034kd8j82"
+            },
+            {
+                "label": "MAGIC Telescopes",
+                "type": "related",
+                "id": "https://ror.org/02w0r2764"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "education",
+            "funder"
+        ]
+    },
+    {
+        "admin": {
+            "created": {
+                "date": "2024-03-13",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2026-08-03",
+                "schema_version": "2.1"
+            }
+        },
+        "domains": [],
+        "established": 2020,
+        "external_ids": [
+            {
+                "all": [
+                    "Q17028004"
+                ],
+                "preferred": "Q17028004",
+                "type": "wikidata"
+            }
+        ],
+        "id": "https://ror.org/03jzzxg14",
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.uhbw.nhs.uk"
+            },
+            {
+                "type": "wikipedia",
+                "value": "https://en.wikipedia.org/wiki/University_Hospitals_Bristol_and_Weston_NHS_Foundation_Trust"
+            }
+        ],
+        "locations": [
+            {
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "GB",
+                    "country_name": "United Kingdom",
+                    "country_subdivision_code": "ENG",
+                    "country_subdivision_name": "England",
+                    "lat": 51.45523,
+                    "lng": -2.59665,
+                    "name": "Bristol"
+                },
+                "geonames_id": 2654675
+            }
+        ],
+        "names": [
+            {
+                "lang": "en",
+                "types": [
+                    "alias"
+                ],
+                "value": "Bristol and Weston Foundation Trust"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "alias"
+                ],
+                "value": "Bristol and Weston NHS Trust"
+            },
+            {
+                "lang": null,
+                "types": [
+                    "acronym"
+                ],
+                "value": "UHBW"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "alias"
+                ],
+                "value": "UHBW NHS Foundation Trust"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "value": "University Hospitals Bristol and Weston NHS Foundation Trust"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "alias"
+                ],
+                "value": "University Hospitals Bristol and Weston Trust"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Weston General Hospital",
+                "type": "child",
+                "id": "https://ror.org/03mc19e15"
+            },
+            {
+                "label": "University Hospitals Bristol NHS Foundation Trust",
+                "type": "predecessor",
+                "id": "https://ror.org/04nm1cv11"
+            },
+            {
+                "label": "Weston Area Health NHS Trust",
+                "type": "predecessor",
+                "id": "https://ror.org/03fpf5m04"
+            },
+            {
+                "label": "Bristol NHS Foundation Trust",
+                "type": "successor",
+                "id": "https://ror.org/054vvq170"
+            }
+        ],
+        "status": "inactive",
+        "types": [
+            "healthcare"
+        ]
+    },
+    {
+        "admin": {
+            "created": {
+                "date": "2026-08-03",
+                "schema_version": "2.1"
+            },
+            "last_modified": {
+                "date": "2026-09-22",
+                "schema_version": "2.1"
+            }
+        },
+        "domains": [
+            "bristolft.nhs.uk"
+        ],
+        "established": 2026,
+        "external_ids": [
+            {
+                "all": [
+                    "Q140408330"
+                ],
+                "preferred": "Q140408330",
+                "type": "wikidata"
+            }
+        ],
+        "id": "https://ror.org/054vvq170",
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.bristolft.nhs.uk"
+            },
+            {
+                "type": "wikipedia",
+                "value": "https://en.wikipedia.org/wiki/Bristol_NHS_Foundation_Trust"
+            }
+        ],
+        "locations": [
+            {
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "GB",
+                    "country_name": "United Kingdom",
+                    "country_subdivision_code": "ENG",
+                    "country_subdivision_name": "England",
+                    "lat": 51.45523,
+                    "lng": -2.59665,
+                    "name": "Bristol"
+                },
+                "geonames_id": 2654675
+            }
+        ],
+        "names": [
+            {
+                "lang": "en",
+                "types": [
+                    "acronym"
+                ],
+                "value": "BFT"
+            },
+            {
+                "lang": "en",
+                "types": [
+                    "label",
+                    "ror_display"
+                ],
+                "value": "Bristol NHS Foundation Trust"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Clevedon Hospital",
+                "type": "child",
+                "id": "https://ror.org/04ny9jk61"
+            },
+            {
+                "label": "Cossham Hospital",
+                "type": "child",
+                "id": "https://ror.org/04e0p7290"
+            },
+            {
+                "label": "Frenchay Hospital",
+                "type": "child",
+                "id": "https://ror.org/03z8x2j90"
+            },
+            {
+                "label": "Southmead Hospital",
+                "type": "child",
+                "id": "https://ror.org/05d576879"
+            },
+            {
+                "label": "Weston General Hospital",
+                "type": "child",
+                "id": "https://ror.org/03mc19e15"
+            },
+            {
+                "label": "Bristol Royal Infirmary",
+                "type": "child",
+                "id": "https://ror.org/031p4kj21"
+            },
+            {
+                "label": "Bristol Royal Hospital for Children",
+                "type": "child",
+                "id": "https://ror.org/01qgecw57"
+            },
+            {
+                "label": "University Of Bristol Dental Hospital",
+                "type": "child",
+                "id": "https://ror.org/027a33v57"
+            },
+            {
+                "label": "Bristol Eye Hospital",
+                "type": "child",
+                "id": "https://ror.org/01w151e64"
+            },
+            {
+                "label": "South Bristol Community Hospital",
+                "type": "child",
+                "id": "https://ror.org/00pa9y269"
+            },
+            {
+                "label": "St Michael's Hospital",
+                "type": "child",
+                "id": "https://ror.org/02hqqna27"
+            },
+            {
+                "label": "University Hospitals Bristol and Weston NHS Foundation Trust",
+                "type": "predecessor",
+                "id": "https://ror.org/03jzzxg14"
+            },
+            {
+                "label": "North Bristol NHS Trust",
+                "type": "predecessor",
+                "id": "https://ror.org/036x6gt55"
+            },
+            {
+                "label": "NIHR Bristol Biomedical Research Centre",
+                "type": "child",
+                "id": "https://ror.org/02mtt1z51"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "healthcare"
+        ]
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 2653941,
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "GB",
+                    "country_name": "United Kingdom",
+                    "country_subdivision_code": "ENG",
+                    "country_subdivision_name": "England",
+                    "lat": 52.2,
+                    "lng": 0.11667,
+                    "name": "Cambridge"
+                }
+            }
+        ],
+        "established": 2001,
+        "external_ids": [
+            {
+                "type": "grid",
+                "all": [
+                    "grid.466955.d"
+                ],
+                "preferred": "grid.466955.d"
+            }
+        ],
+        "id": "https://ror.org/03bdvdc06",
+        "domains": [],
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.plos.org/"
+            }
+        ],
+        "names": [
+            {
+                "value": "PLOS",
+                "types": [
+                    "acronym"
+                ],
+                "lang": null
+            },
+            {
+                "value": "Public Library of Science",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Public Library of Science",
+                "type": "successor",
+                "id": "https://ror.org/008zgvp64"
+            }
+        ],
+        "status": "withdrawn",
+        "types": [
+            "nonprofit"
+        ],
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 5391959,
+                "geonames_details": {
+                    "continent_code": "NA",
+                    "continent_name": "North America",
+                    "country_code": "US",
+                    "country_name": "United States",
+                    "country_subdivision_code": "CA",
+                    "country_subdivision_name": "California",
+                    "lat": 37.77493,
+                    "lng": -122.41942,
+                    "name": "San Francisco"
+                }
+            }
+        ],
+        "established": 2003,
+        "external_ids": [
+            {
+                "type": "grid",
+                "all": [
+                    "grid.431302.7"
+                ],
+                "preferred": "grid.431302.7"
+            },
+            {
+                "type": "isni",
+                "all": [
+                    "0000 0004 0482 455X"
+                ],
+                "preferred": null
+            },
+            {
+                "type": "wikidata",
+                "all": [
+                    "Q233358"
+                ],
+                "preferred": null
+            }
+        ],
+        "id": "https://ror.org/008zgvp64",
+        "domains": [],
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.plos.org/"
+            },
+            {
+                "type": "wikipedia",
+                "value": "https://en.wikipedia.org/wiki/PLOS"
+            }
+        ],
+        "names": [
+            {
+                "value": "PLOS",
+                "types": [
+                    "acronym"
+                ],
+                "lang": null
+            },
+            {
+                "value": "Public Library of Science",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            }
+        ],
+        "relationships": [],
+        "status": "active",
+        "types": [
+            "archive"
+        ],
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 1785738,
+                "geonames_details": {
+                    "continent_code": "AS",
+                    "continent_name": "Asia",
+                    "country_code": "CN",
+                    "country_name": "China",
+                    "country_subdivision_code": "SX",
+                    "country_subdivision_name": "Shanxi",
+                    "lat": 35.02306,
+                    "lng": 110.99278,
+                    "name": "Yuncheng"
+                }
+            }
+        ],
+        "established": null,
+        "external_ids": [],
+        "id": "https://ror.org/030a08k25",
+        "domains": [],
+        "links": [],
+        "names": [
+            {
+                "value": "Jishan County People's Hospital",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "People's Hospital of Jishan County",
+                "types": [
+                    "alias"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "\u7a37\u5c71\u53bf\u4eba\u6c11\u533b\u9662",
+                "types": [
+                    "label"
+                ],
+                "lang": "zh"
+            }
+        ],
+        "relationships": [],
+        "status": "active",
+        "types": [
+            "healthcare"
+        ],
+        "admin": {
+            "created": {
+                "date": "2022-10-27",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 2128295,
+                "geonames_details": {
+                    "continent_code": "AS",
+                    "continent_name": "Asia",
+                    "country_code": "JP",
+                    "country_name": "Japan",
+                    "country_subdivision_code": "01",
+                    "country_subdivision_name": "Hokkaido",
+                    "lat": 43.06667,
+                    "lng": 141.35,
+                    "name": "Sapporo"
+                }
+            }
+        ],
+        "established": 1876,
+        "external_ids": [
+            {
+                "type": "fundref",
+                "all": [
+                    "501100005946"
+                ],
+                "preferred": null
+            },
+            {
+                "type": "grid",
+                "all": [
+                    "grid.39158.36"
+                ],
+                "preferred": "grid.39158.36"
+            },
+            {
+                "type": "isni",
+                "all": [
+                    "0000 0001 2173 7691"
+                ],
+                "preferred": null
+            },
+            {
+                "type": "wikidata",
+                "all": [
+                    "Q1057199"
+                ],
+                "preferred": null
+            }
+        ],
+        "id": "https://ror.org/02e16g702",
+        "domains": [],
+        "links": [
+            {
+                "type": "website",
+                "value": "https://www.global.hokudai.ac.jp/"
+            },
+            {
+                "type": "wikipedia",
+                "value": "http://en.wikipedia.org/wiki/Hokkaido_University"
+            }
+        ],
+        "names": [
+            {
+                "value": "Hokkaido University",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "Hokkaid\u014d daigaku",
+                "types": [
+                    "alias"
+                ],
+                "lang": null
+            },
+            {
+                "value": "\u5317\u6d77\u9053\u5927\u5b66",
+                "types": [
+                    "label"
+                ],
+                "lang": "ja"
+            }
+        ],
+        "relationships": [
+            {
+                "type": "related",
+                "label": "Hokkaido University Hospital",
+                "id": "https://ror.org/0419drx70"
+            }
+        ],
+        "status": "active",
+        "types": [
+            "education",
+            "funder"
+        ],
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 524901,
+                "geonames_details": {
+                    "continent_code": "EU",
+                    "continent_name": "Europe",
+                    "country_code": "RU",
+                    "country_name": "Russia",
+                    "country_subdivision_code": "MOW",
+                    "country_subdivision_name": "Moscow",
+                    "lat": 55.75222,
+                    "lng": 37.61556,
+                    "name": "Moscow"
+                }
+            }
+        ],
+        "established": 1951,
+        "external_ids": [
+            {
+                "type": "grid",
+                "all": [
+                    "grid.446226.0"
+                ],
+                "preferred": "grid.446226.0"
+            },
+            {
+                "type": "isni",
+                "all": [
+                    "0000 0001 0370 2102"
+                ],
+                "preferred": null
+            },
+            {
+                "type": "wikidata",
+                "all": [
+                    "Q4304073"
+                ],
+                "preferred": null
+            }
+        ],
+        "id": "https://ror.org/04dstfg97",
+        "domains": [],
+        "links": [
+            {
+                "type": "website",
+                "value": "http://www.mggu-sh.ru/"
+            },
+            {
+                "type": "wikipedia",
+                "value": "https://en.wikipedia.org/wiki/Sholokhov_Moscow_State_University_for_Humanities"
+            }
+        ],
+        "names": [
+            {
+                "value": "Moscow State University for Humanities named after M.A. Sholokhov",
+                "types": [
+                    "alias"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "Sholokhov Moscow State University for Humanities",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "\u041c\u043e\u0441\u043a\u043e\u0432\u0441\u043a\u0438\u0439 \u0433\u043e\u0441\u0443\u0434\u0430\u0440\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439 \u0433\u0443\u043c\u0430\u043d\u0438\u0442\u0430\u0440\u043d\u044b\u0439 \u0443\u043d\u0438\u0432\u0435\u0440\u0441\u0438\u0442\u0435\u0442 \u0438\u043c\u0435\u043d\u0438 \u041c. \u0410. \u0428\u043e\u043b\u043e\u0445\u043e\u0432\u0430",
+                "types": [
+                    "label"
+                ],
+                "lang": "ru"
+            }
+        ],
+        "relationships": [
+            {
+                "label": "Moscow State Pedagogical University",
+                "type": "successor",
+                "id": "https://ror.org/03a9mf398"
+            }
+        ],
+        "status": "inactive",
+        "types": [
+            "education"
+        ],
+        "admin": {
+            "created": {
+                "date": "2018-11-14",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    },
+    {
+        "locations": [
+            {
+                "geonames_id": 5419384,
+                "geonames_details": {
+                    "continent_code": "NA",
+                    "continent_name": "North America",
+                    "country_code": "US",
+                    "country_name": "United States",
+                    "country_subdivision_code": "CO",
+                    "country_subdivision_name": "Colorado",
+                    "lat": 39.73915,
+                    "lng": -104.9847,
+                    "name": "Denver"
+                }
+            }
+        ],
+        "established": null,
+        "external_ids": [],
+        "id": "https://ror.org/028ydjm20",
+        "domains": [],
+        "links": [],
+        "names": [
+            {
+                "value": "Argosy University",
+                "types": [
+                    "ror_display",
+                    "label"
+                ],
+                "lang": "en"
+            },
+            {
+                "value": "Argosy University Denver",
+                "types": [
+                    "alias"
+                ],
+                "lang": "en"
+            }
+        ],
+        "relationships": [],
+        "status": "inactive",
+        "types": [
+            "education"
+        ],
+        "admin": {
+            "created": {
+                "date": "2024-03-28",
+                "schema_version": "1.0"
+            },
+            "last_modified": {
+                "date": "2024-12-11",
+                "schema_version": "2.1"
+            }
+        }
+    }
+]

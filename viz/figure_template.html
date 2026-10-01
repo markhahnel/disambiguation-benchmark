@@ -1,0 +1,137 @@
+<!doctype html>
+<!-- ORW-TEMPLATE-NOTES-BEGIN (this whole comment is dropped at render time)
+  Skeleton every figure in this project starts from. Rendered by
+  src/disambig/figures.py:render_figure_html, which substitutes the {{ORW_*}}
+  placeholders, regenerates the theme CSS block from the palette, and refuses
+  to emit a document with a placeholder left in it.
+
+  Contract this file has to satisfy, and why (CLAUDE.md sections 4 and 6):
+    * Self-contained. No external http(s) reference of any kind, no CDN, no
+      sibling file: data and script are inlined. Every figure ships as an
+      iframe from a static host and is also opened as a bare file, so anything
+      it does not carry itself is a figure that renders blank for the reader.
+      figures.assert_no_external_references enforces this on every render.
+    * Both themes in one document. The light and dark SVGs are both inlined and
+      swapped by prefers-color-scheme, because the iframe cannot see the
+      parent's theme and gets no chance to ask.
+    * Posts its own height to the parent, so the one listener in Ghost's site
+      footer (viz/ghost-embed-listener.js) can size the iframe. Until that
+      listener is pasted into Ghost, figures render at the fallback height set
+      inline on the iframe.
+    * Carries a "get the data" link to the figure's own aggregate CSV, as a
+      relative URL so it resolves both on the figure host and as a bare file.
+
+  Opened as-is, unsubstituted, this file renders an empty figure with the
+  placeholder text visible. That is expected: it is a skeleton, not a figure.
+ORW-TEMPLATE-NOTES-END -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ORW_TITLE}}</title>
+<style>
+  /* ORW-THEME-CSS-BEGIN generated from viz/palette.js by src/disambig/figures.py */
+  :root {
+    --orw-background: #ffffff;
+    --orw-text: #1a1a1a;
+    --orw-muted: #6b6b6b;
+    --orw-grid: #e0e0e0;
+    --orw-accent: #0072B2;
+    --orw-accent2: #E69F00;
+    --orw-accent3: #009E73;
+    --orw-accent4: #CC79A7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --orw-background: #111418;
+      --orw-text: #f0f0f0;
+      --orw-muted: #9a9a9a;
+      --orw-grid: #33383f;
+      --orw-accent: #56B4E9;
+      --orw-accent2: #E69F00;
+      --orw-accent3: #009E73;
+      --orw-accent4: #CC79A7;
+    }
+  }
+  /* ORW-THEME-CSS-END */
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--orw-background); color: var(--orw-text);
+         font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  #orw-root { padding: 0 0 4px; }
+  figure { margin: 0; }
+  svg { display: block; width: 100%; height: auto; }
+  .orw-dark-only { display: none; }
+  @media (prefers-color-scheme: dark) {
+    .orw-light-only { display: none; }
+    .orw-dark-only { display: block; }
+  }
+  .orw-getdata { margin: 0; padding: 2px 16px 8px; font-size: 12px; color: var(--orw-muted); }
+  .orw-getdata a { color: var(--orw-accent); }
+  @media print {
+    .orw-dark-only { display: none; }
+    .orw-light-only { display: block; }
+  }
+</style>
+</head>
+<body>
+<div id="orw-root">
+<figure role="img" aria-label="{{ORW_ALT_TEXT}}">
+  <div class="orw-light-only">{{ORW_SVG_LIGHT}}</div>
+  <div class="orw-dark-only">{{ORW_SVG_DARK}}</div>
+</figure>
+<p class="orw-getdata"><a href="{{ORW_DATA_HREF}}" download>{{ORW_DATA_LABEL}}</a></p>
+<!-- ORW-DATA-BEGIN: dropped entirely when the figure inlines no data -->
+<script type="application/json" id="orw-data">{{ORW_INLINE_DATA}}</script>
+<!-- ORW-DATA-END -->
+<!-- ORW-SCRIPT-BEGIN: dropped entirely when the figure is a static SVG. Any
+     library an interactive figure needs is inlined here in full; there is no
+     CDN to load it from at render time. -->
+<script>{{ORW_SCRIPT}}</script>
+<!-- ORW-SCRIPT-END -->
+</div>
+<script>
+(function () {
+  "use strict";
+  // Height reporting. The parent has no way to measure a cross-origin
+  // document, so the document tells it; viz/ghost-embed-listener.js is the
+  // other half of this contract and validates the sender's origin.
+  var FIGURE_ID = "{{ORW_FIGURE_ID}}";
+  var root = document.getElementById("orw-root");
+  var last = 0;
+
+  function postHeight() {
+    if (window.parent === window) return; // opened as a bare file, no parent to tell
+    // Measure the content wrapper rather than the document: the document is at
+    // least as tall as the iframe, so measuring it would let a figure grow but
+    // never shrink back.
+    var box = root.getBoundingClientRect();
+    // A zero-width box means the iframe has not been laid out yet (it is still
+    // collapsed, or it is a lazy frame nowhere near the viewport). The SVG
+    // scales to the width it is given, so any height measured now is nonsense
+    // and would tell the parent to collapse the figure.
+    if (box.width <= 0) return;
+    var height = Math.ceil(box.height);
+    if (height <= 0 || height === last) return;
+    last = height;
+    // targetOrigin "*" because the parent is a different host from the figure
+    // host and this document should not hard-code which site frames it. All
+    // that is disclosed is a pixel height.
+    window.parent.postMessage({ type: "orw-figure-height", id: FIGURE_ID, height: height }, "*");
+  }
+
+  // Nothing is posted synchronously here on purpose: measured before the
+  // browser has laid the SVG out, the wrapper is only as tall as the text
+  // under it, and the parent would collapse the iframe and then grow it again
+  // a frame later. The ResizeObserver's first callback runs after layout, and
+  // load runs after webfonts, so both of those measure something real.
+  window.addEventListener("load", postHeight);
+  if (typeof ResizeObserver === "function") {
+    new ResizeObserver(postHeight).observe(root);
+  } else {
+    window.addEventListener("resize", postHeight);
+    document.addEventListener("DOMContentLoaded", postHeight);
+  }
+})();
+</script>
+</body>
+</html>

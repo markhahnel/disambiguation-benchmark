@@ -13,10 +13,19 @@ Design decisions that matter methodologically:
   bugs.
 - Every label stores elapsed milliseconds; the time distribution per stratum
   is itself a finding.
+- Given the pinned ROR release, a label may only carry ids the release
+  contains (METHODS.md section 6): the scorer resolves hierarchy against that
+  release and crashes on a gold id it cannot see, and the only remedies at
+  that point, moving the pin or editing a frozen gold standard, are both
+  forbidden. So the refusal happens here, at labelling time, with a 422 that
+  names the id, and ROR search results the release does not contain are
+  hidden with a warning in the log per hidden candidate. Without a release
+  (demo mode) nothing is checked.
 """
 
 from __future__ import annotations
 
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Any, Protocol
 
@@ -26,6 +35,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
 from disambig.models import Candidate, Decision, Label
+from disambig.ror_ids import normalise_ror_id
 from disambig.store import ReviewStore, now_iso
 
 log = structlog.get_logger(__name__)
@@ -35,6 +45,17 @@ STATIC_DIR = Path(__file__).parent / "static"
 
 class RorSearcher(Protocol):
     def search(self, query: str, refresh: bool = False) -> list[Candidate]: ...
+
+
+class RorRelease(Protocol):
+    """The pinned ROR release, as far as labelling needs it: membership only.
+
+    Spelled ``__contains__`` to match ``matching.RorGraph``, so the one
+    ``RorDump`` the scorer loads serves the review UI unchanged. Any set of
+    canonical ids satisfies it too, which is what the tests pass.
+    """
+
+    def __contains__(self, ror_id: str, /) -> bool: ...
 
 
 class LabelRequest(BaseModel):
@@ -52,7 +73,11 @@ class UndoRequest(BaseModel):
     annotator: str
 
 
-def create_app(store: ReviewStore, ror_searcher: RorSearcher | None = None) -> FastAPI:
+def create_app(
+    store: ReviewStore,
+    ror_searcher: RorSearcher | None = None,
+    ror_release: RorRelease | None = None,
+) -> FastAPI:
     app = FastAPI(title="disambig review UI")
 
     @app.get("/")
@@ -90,6 +115,23 @@ def create_app(store: ReviewStore, ror_searcher: RorSearcher | None = None) -> F
             )
         _, proposal = result
         decision = _derive_decision(request, proposal_ror_ids=_proposed_set(proposal))
+        if ror_release is not None:
+            unknown = ids_outside_release(request.selected_ror_ids, ror_release)
+            if unknown:
+                log.warning(
+                    "label_refused_ids_outside_pinned_release",
+                    item_id=request.item_id,
+                    annotator=request.annotator,
+                    outcome=request.outcome,
+                    unknown_ror_ids=unknown,
+                )
+                raise HTTPException(
+                    status_code=422,
+                    detail=(
+                        "Refusing to label with ROR ids the pinned ROR release does not "
+                        "contain (the scorer could not resolve them): " + ", ".join(unknown)
+                    ),
+                )
         label = Label(
             item_id=request.item_id,
             annotator=request.annotator,
@@ -124,12 +166,59 @@ def create_app(store: ReviewStore, ror_searcher: RorSearcher | None = None) -> F
     def ror_search(q: str) -> dict[str, Any]:
         if ror_searcher is None:
             raise HTTPException(status_code=503, detail="ROR search not configured")
-        if not q.strip():
+        query = q.strip()
+        if not query:
             return {"candidates": []}
-        candidates = ror_searcher.search(q.strip())
+        candidates = ror_searcher.search(query)
+        if ror_release is not None:
+            candidates = within_release(candidates, ror_release, query=query)
         return {"candidates": [candidate.model_dump() for candidate in candidates[:10]]}
 
     return app
+
+
+def ids_outside_release(ror_ids: Iterable[str], release: RorRelease) -> list[str]:
+    """The ids the pinned release does not contain, spelled as they were sent.
+
+    Membership is checked on the normalised form, the same canonicalisation
+    the scorer applies to every id, so a formatting difference is never
+    mistaken for an unknown organisation. An id that cannot be normalised is
+    not shaped like a ROR id at all, so the release cannot contain it either.
+    """
+    unknown: list[str] = []
+    for ror_id in dict.fromkeys(ror_ids):
+        try:
+            canonical = normalise_ror_id(ror_id)
+        except ValueError:
+            unknown.append(ror_id)
+            continue
+        if canonical not in release:
+            unknown.append(ror_id)
+    return unknown
+
+
+def within_release(
+    candidates: list[Candidate], release: RorRelease, *, query: str
+) -> list[Candidate]:
+    """Drop search results the pinned release does not contain, one warning each.
+
+    The annotator never sees a dropped organisation, so the log is the only
+    place its absence is visible. Each warning names the candidate and the
+    query, so a run of them against one query is legible afterwards as "the
+    organisation the annotator wanted was newer than the pinned release".
+    """
+    kept: list[Candidate] = []
+    for candidate in candidates:
+        if ids_outside_release((candidate.ror_id,), release):
+            log.warning(
+                "ror_search_candidate_outside_pinned_release",
+                ror_id=candidate.ror_id,
+                name=candidate.name,
+                query=query,
+            )
+            continue
+        kept.append(candidate)
+    return kept
 
 
 def _proposed_set(proposal: Any) -> set[str]:

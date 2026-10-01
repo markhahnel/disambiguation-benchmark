@@ -1,0 +1,1698 @@
+{
+  "_comment": "Golden file for src/disambig/matching.py. Every organisation in `graph` is a real record from the pinned ROR data dump (version below), with its display name, status, location and complete relationship list copied unmodified; names and locations are carried for the reader only and are not consulted by the matcher. The graph is sparse like a hand-extracted subgraph: edges may name ids with no record of their own. Every expectation in `cases` was derived by hand from those relationship lists and the definitions in the module docstring; each case names its organisations in `organisations`. The one id not in the dump, https://ror.org/0zzzzzz99, was verified absent from all 141,528 records of the pinned release. Element counts are null wherever the module docstring says an outcome carries none (no_assignment, gold_ambiguous, gold_no_ror).",
+  "ror_dump_version": "v2.13",
+  "ror_dump_publication_date": "2026-09-22",
+  "graph": {
+    "https://ror.org/0038gz437": {
+      "name": "Newman University",
+      "status": "active",
+      "city": "Wichita",
+      "country": "United States",
+      "relationships": {}
+    },
+    "https://ror.org/0080acb59": {
+      "name": "John Radcliffe Hospital",
+      "status": "active",
+      "city": "Oxford",
+      "country": "United Kingdom",
+      "relationships": {
+        "parent": [
+          "https://ror.org/0358tcd02",
+          "https://ror.org/03h2bh287"
+        ],
+        "related": [
+          "https://ror.org/04v2twj65",
+          "https://ror.org/052gg0110"
+        ]
+      }
+    },
+    "https://ror.org/008zgvp64": {
+      "name": "Public Library of Science",
+      "status": "active",
+      "city": "San Francisco",
+      "country": "United States",
+      "relationships": {}
+    },
+    "https://ror.org/009tnsj43": {
+      "name": "Newman University",
+      "status": "active",
+      "city": "Birmingham",
+      "country": "United Kingdom",
+      "relationships": {
+        "child": [
+          "https://ror.org/02vndcn56"
+        ]
+      }
+    },
+    "https://ror.org/00w0f8567": {
+      "name": "Kyushu Tokai University",
+      "status": "inactive",
+      "city": "Kumamoto",
+      "country": "Japan",
+      "relationships": {
+        "successor": [
+          "https://ror.org/01p7qe739"
+        ]
+      }
+    },
+    "https://ror.org/01ahsqc77": {
+      "name": "Kennedy Institute of Rheumatology",
+      "status": "active",
+      "city": "Oxford",
+      "country": "United Kingdom",
+      "relationships": {
+        "parent": [
+          "https://ror.org/052gg0110"
+        ]
+      }
+    },
+    "https://ror.org/01p7qe739": {
+      "name": "Tokai University",
+      "status": "active",
+      "city": "Tokyo",
+      "country": "Japan",
+      "relationships": {
+        "related": [
+          "https://ror.org/00gr1q288",
+          "https://ror.org/01gvmn480",
+          "https://ror.org/02w0r2764",
+          "https://ror.org/034kd8j82"
+        ]
+      }
+    },
+    "https://ror.org/02e16g702": {
+      "name": "Hokkaido University",
+      "status": "active",
+      "city": "Sapporo",
+      "country": "Japan",
+      "relationships": {
+        "related": [
+          "https://ror.org/0419drx70"
+        ]
+      }
+    },
+    "https://ror.org/034t30j35": {
+      "name": "Chinese Academy of Sciences",
+      "status": "active",
+      "city": "Beijing",
+      "country": "China",
+      "relationships": {
+        "child": [
+          "https://ror.org/0000pmw59",
+          "https://ror.org/0027d9x02",
+          "https://ror.org/003n8re58",
+          "https://ror.org/00655qp86",
+          "https://ror.org/007ffzr57",
+          "https://ror.org/0090r4d87",
+          "https://ror.org/00b4mx203",
+          "https://ror.org/00cn03n83",
+          "https://ror.org/00f58mx93",
+          "https://ror.org/00ft6nj33",
+          "https://ror.org/00ga02e19",
+          "https://ror.org/00h52n341",
+          "https://ror.org/00nqzn326",
+          "https://ror.org/00prkya54",
+          "https://ror.org/00qae8971",
+          "https://ror.org/00rytkh49",
+          "https://ror.org/00v8rqv75",
+          "https://ror.org/00vpwhm04",
+          "https://ror.org/00w78qy64",
+          "https://ror.org/00x44h034",
+          "https://ror.org/011rf9d86",
+          "https://ror.org/012rct222",
+          "https://ror.org/018yw5541",
+          "https://ror.org/0192yj155",
+          "https://ror.org/019av8481",
+          "https://ror.org/01a8ev928",
+          "https://ror.org/01a9z1q73",
+          "https://ror.org/01hh9ag93",
+          "https://ror.org/01jxjav08",
+          "https://ror.org/01jz1e142",
+          "https://ror.org/01pab2602",
+          "https://ror.org/01s0wyf50",
+          "https://ror.org/01thb7525",
+          "https://ror.org/01tyv8576",
+          "https://ror.org/01xqdxh54",
+          "https://ror.org/01y3hvq34",
+          "https://ror.org/01z143507",
+          "https://ror.org/022c3hy66",
+          "https://ror.org/022syn853",
+          "https://ror.org/025gq5q04",
+          "https://ror.org/027n0k361",
+          "https://ror.org/028fy7q25",
+          "https://ror.org/02aee5m12",
+          "https://ror.org/02bn68w95",
+          "https://ror.org/02br7py06",
+          "https://ror.org/02c31t502",
+          "https://ror.org/02ce9qs13",
+          "https://ror.org/02cjszf03",
+          "https://ror.org/02e5hx313",
+          "https://ror.org/02eb4t121",
+          "https://ror.org/02j0gyf89",
+          "https://ror.org/02j89k719",
+          "https://ror.org/02jkmyk67",
+          "https://ror.org/02nnjtm50",
+          "https://ror.org/02rrdvm96",
+          "https://ror.org/02rz58g17",
+          "https://ror.org/02s6gs133",
+          "https://ror.org/02t7c3b83",
+          "https://ror.org/02txedb84",
+          "https://ror.org/02w6gr951",
+          "https://ror.org/02xtbq882",
+          "https://ror.org/02z0nsb22",
+          "https://ror.org/030vmwa78",
+          "https://ror.org/031npqv35",
+          "https://ror.org/031zj0q48",
+          "https://ror.org/033dfsn42",
+          "https://ror.org/033js6g46",
+          "https://ror.org/0356cst02",
+          "https://ror.org/0366c6s65",
+          "https://ror.org/03ep8d157",
+          "https://ror.org/03g897070",
+          "https://ror.org/03j4x9j18",
+          "https://ror.org/03j7v5j15",
+          "https://ror.org/03jqz2y95",
+          "https://ror.org/03k6r8t20",
+          "https://ror.org/03m0vk445",
+          "https://ror.org/03pa1rf77",
+          "https://ror.org/03rpsvy57",
+          "https://ror.org/03v8tnc06",
+          "https://ror.org/03x8rhq63",
+          "https://ror.org/03zn6c508",
+          "https://ror.org/0419fj215",
+          "https://ror.org/0424h4e32",
+          "https://ror.org/042pyga86",
+          "https://ror.org/0444j5556",
+          "https://ror.org/046n57345",
+          "https://ror.org/047qgg117",
+          "https://ror.org/047yhep71",
+          "https://ror.org/048dd0611",
+          "https://ror.org/048y1rc66",
+          "https://ror.org/049d6bh38",
+          "https://ror.org/049gn7z52",
+          "https://ror.org/04acsr153",
+          "https://ror.org/04akaak77",
+          "https://ror.org/04c4dkn09",
+          "https://ror.org/04dxnaz06",
+          "https://ror.org/04ew43640",
+          "https://ror.org/04f49ff35",
+          "https://ror.org/04gh4er46",
+          "https://ror.org/04ndjyr10",
+          "https://ror.org/04nps9965",
+          "https://ror.org/04nytyj38",
+          "https://ror.org/04r53se39",
+          "https://ror.org/04t1cdb72",
+          "https://ror.org/04vs9wp72",
+          "https://ror.org/04w5etv87",
+          "https://ror.org/050spgz68",
+          "https://ror.org/057jnjd73",
+          "https://ror.org/058pyyv44",
+          "https://ror.org/05cvf7v30",
+          "https://ror.org/05cy2r844",
+          "https://ror.org/05etnz140",
+          "https://ror.org/05f6mer85",
+          "https://ror.org/05h3vcy91",
+          "https://ror.org/05hr3ch11",
+          "https://ror.org/05j73fd60",
+          "https://ror.org/05nj8ma95",
+          "https://ror.org/05nqg3g04",
+          "https://ror.org/05qbk4x57",
+          "https://ror.org/05qm21180",
+          "https://ror.org/05skxkv18"
+        ],
+        "related": [
+          "https://ror.org/00ff97g12",
+          "https://ror.org/00hwty226",
+          "https://ror.org/00qzhtm25",
+          "https://ror.org/00s97k668",
+          "https://ror.org/013wv8d67",
+          "https://ror.org/01a1ft290",
+          "https://ror.org/01g9hkj35",
+          "https://ror.org/01m909h91",
+          "https://ror.org/01mfkkh63",
+          "https://ror.org/01n1cbn15",
+          "https://ror.org/01nmxvn49",
+          "https://ror.org/01vcw4681",
+          "https://ror.org/02egfyg20",
+          "https://ror.org/02tthqe19",
+          "https://ror.org/02wt4jg41",
+          "https://ror.org/02xqp7x96",
+          "https://ror.org/02xr9bp50",
+          "https://ror.org/030k21z47",
+          "https://ror.org/031141b54",
+          "https://ror.org/031mqp384",
+          "https://ror.org/03nb8cd76",
+          "https://ror.org/03rq35s79",
+          "https://ror.org/04aa0zm65",
+          "https://ror.org/05bkrjx06",
+          "https://ror.org/05d5nhn14",
+          "https://ror.org/05ev3vr27",
+          "https://ror.org/05pp5b412"
+        ]
+      }
+    },
+    "https://ror.org/03bdvdc06": {
+      "name": "Public Library of Science",
+      "status": "withdrawn",
+      "city": "Cambridge",
+      "country": "United Kingdom",
+      "relationships": {
+        "successor": [
+          "https://ror.org/008zgvp64"
+        ]
+      }
+    },
+    "https://ror.org/03fpf5m04": {
+      "name": "Weston Area Health NHS Trust",
+      "status": "inactive",
+      "city": "Weston-super-Mare",
+      "country": "United Kingdom",
+      "relationships": {
+        "child": [
+          "https://ror.org/03mc19e15"
+        ],
+        "successor": [
+          "https://ror.org/03jzzxg14"
+        ]
+      }
+    },
+    "https://ror.org/03h2bh287": {
+      "name": "Oxford University Hospitals NHS Trust",
+      "status": "active",
+      "city": "Oxford",
+      "country": "United Kingdom",
+      "relationships": {
+        "child": [
+          "https://ror.org/0036ate90",
+          "https://ror.org/0080acb59",
+          "https://ror.org/009vheq40",
+          "https://ror.org/00aps1a34",
+          "https://ror.org/02pj4bp80",
+          "https://ror.org/03myafa32",
+          "https://ror.org/03zeg3732",
+          "https://ror.org/05kgg0s20"
+        ]
+      }
+    },
+    "https://ror.org/03jzzxg14": {
+      "name": "University Hospitals Bristol and Weston NHS Foundation Trust",
+      "status": "inactive",
+      "city": "Bristol",
+      "country": "United Kingdom",
+      "relationships": {
+        "child": [
+          "https://ror.org/03mc19e15"
+        ],
+        "predecessor": [
+          "https://ror.org/03fpf5m04",
+          "https://ror.org/04nm1cv11"
+        ],
+        "successor": [
+          "https://ror.org/054vvq170"
+        ]
+      }
+    },
+    "https://ror.org/0419drx70": {
+      "name": "Hokkaido University Hospital",
+      "status": "active",
+      "city": "Sapporo",
+      "country": "Japan",
+      "relationships": {
+        "related": [
+          "https://ror.org/02e16g702"
+        ]
+      }
+    },
+    "https://ror.org/04dshd728": {
+      "name": "State Key Laboratory of Magnetism",
+      "status": "active",
+      "city": "Beijing",
+      "country": "China",
+      "relationships": {
+        "parent": [
+          "https://ror.org/05cvf7v30"
+        ]
+      }
+    },
+    "https://ror.org/052gg0110": {
+      "name": "University of Oxford",
+      "status": "active",
+      "city": "Oxford",
+      "country": "United Kingdom",
+      "relationships": {
+        "child": [
+          "https://ror.org/00wgpgb78",
+          "https://ror.org/011hz4254",
+          "https://ror.org/0172mzb45",
+          "https://ror.org/017g85521",
+          "https://ror.org/01ahsqc77",
+          "https://ror.org/01fj67v51",
+          "https://ror.org/01p4s0142",
+          "https://ror.org/01q496a73",
+          "https://ror.org/01rjnta51",
+          "https://ror.org/01tfjyv98",
+          "https://ror.org/02kcpr174",
+          "https://ror.org/02khxwt12",
+          "https://ror.org/0336mm561",
+          "https://ror.org/03fs9z545",
+          "https://ror.org/03myafa32",
+          "https://ror.org/047d2d387",
+          "https://ror.org/05crdvn36",
+          "https://ror.org/05kgg0s20",
+          "https://ror.org/05rehad94"
+        ],
+        "related": [
+          "https://ror.org/0080acb59",
+          "https://ror.org/009vheq40",
+          "https://ror.org/00aps1a34",
+          "https://ror.org/00gnxy738",
+          "https://ror.org/01qcxb695",
+          "https://ror.org/03we1zb10",
+          "https://ror.org/04c8bjx39"
+        ]
+      }
+    },
+    "https://ror.org/054vvq170": {
+      "name": "Bristol NHS Foundation Trust",
+      "status": "active",
+      "city": "Bristol",
+      "country": "United Kingdom",
+      "relationships": {
+        "child": [
+          "https://ror.org/00pa9y269",
+          "https://ror.org/01qgecw57",
+          "https://ror.org/01w151e64",
+          "https://ror.org/027a33v57",
+          "https://ror.org/02hqqna27",
+          "https://ror.org/02mtt1z51",
+          "https://ror.org/031p4kj21",
+          "https://ror.org/03mc19e15",
+          "https://ror.org/03z8x2j90",
+          "https://ror.org/04e0p7290",
+          "https://ror.org/04ny9jk61",
+          "https://ror.org/05d576879"
+        ],
+        "predecessor": [
+          "https://ror.org/036x6gt55",
+          "https://ror.org/03jzzxg14"
+        ]
+      }
+    },
+    "https://ror.org/05cvf7v30": {
+      "name": "Institute of Physics",
+      "status": "active",
+      "city": "Beijing",
+      "country": "China",
+      "relationships": {
+        "child": [
+          "https://ror.org/020vtf184",
+          "https://ror.org/04dshd728",
+          "https://ror.org/05tekqt96"
+        ],
+        "parent": [
+          "https://ror.org/034t30j35"
+        ]
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "exact_hit",
+      "organisations": "University of Oxford assigned, University of Oxford gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "parent_assigned_child_gold",
+      "organisations": "Oxford University Hospitals NHS Trust assigned, John Radcliffe Hospital (its child) gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/0080acb59"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/03h2bh287"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/03h2bh287",
+          "gold": "https://ror.org/0080acb59",
+          "relation": "parent_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": 1
+    },
+    {
+      "id": "child_assigned_parent_gold",
+      "organisations": "John Radcliffe Hospital assigned, Oxford University Hospitals NHS Trust (its parent) gold",
+      "gold": {
+        "decision": "corrected",
+        "ror_ids": [
+          "https://ror.org/03h2bh287"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/0080acb59"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0080acb59",
+          "gold": "https://ror.org/03h2bh287",
+          "relation": "child_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": 1
+    },
+    {
+      "id": "related_hit",
+      "organisations": "John Radcliffe Hospital assigned, University of Oxford gold: related edge asserted from both ends, no hierarchy edge",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/0080acb59"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0080acb59",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "related"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "related_hit_japanese_hospital",
+      "organisations": "Hokkaido University Hospital assigned, Hokkaido University gold: related edge asserted from both ends",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/02e16g702"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/0419drx70"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0419drx70",
+          "gold": "https://ror.org/02e16g702",
+          "relation": "related"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_renamed",
+      "organisations": "Kyushu Tokai University (inactive) assigned, Tokai University (its successor) gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/01p7qe739"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/00w0f8567"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/00w0f8567",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "predecessor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_merged_asserted_from_both_ends",
+      "organisations": "University Hospitals Bristol and Weston NHS Foundation Trust (inactive) assigned, Bristol NHS Foundation Trust (its successor, which names it back as predecessor) gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/054vvq170"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/03jzzxg14"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/03jzzxg14",
+          "gold": "https://ror.org/054vvq170",
+          "relation": "predecessor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_withdrawn",
+      "organisations": "Public Library of Science (withdrawn record, Cambridge UK) assigned, Public Library of Science (active record, San Francisco) gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/008zgvp64"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/03bdvdc06"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/03bdvdc06",
+          "gold": "https://ror.org/008zgvp64",
+          "relation": "predecessor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_two_step_chain",
+      "organisations": "Weston Area Health NHS Trust (inactive) assigned, Bristol NHS Foundation Trust gold: Weston's successor is University Hospitals Bristol and Weston NHS Foundation Trust (inactive), whose successor is Bristol NHS Foundation Trust. Two successor edges, followed transitively, so the relation is predecessor_of_gold and the item is stale under EXACT and PARENT_CHILD; under ANY_RELATIONSHIP the chain is a qualifying relation and the pair is a hit, exactly as a one-step chain is",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/054vvq170"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/03fpf5m04"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/03fpf5m04",
+          "gold": "https://ror.org/054vvq170",
+          "relation": "predecessor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "successor_assigned_inactive_gold",
+      "organisations": "Tokai University assigned, Kyushu Tokai University (inactive, superseded by Tokai) gold: the reverse of stale, only visible if the gold standard names a dead record",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/00w0f8567"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/01p7qe739"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/01p7qe739",
+          "gold": "https://ror.org/00w0f8567",
+          "relation": "successor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "geographic_namesake",
+      "organisations": "Newman University (Wichita, United States) assigned, Newman University (Birmingham, United Kingdom) gold: identical display names, no edge between them",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/009tnsj43"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/0038gz437"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0038gz437",
+          "gold": "https://ror.org/009tnsj43",
+          "relation": "none"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "plainly_wrong",
+      "organisations": "Hokkaido University assigned, University of Oxford gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/02e16g702"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/02e16g702",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "none"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "two_hops_is_not_a_hit",
+      "organisations": "State Key Laboratory of Magnetism assigned, Chinese Academy of Sciences gold: the laboratory's parent is the Institute of Physics, whose parent is CAS. Two hops fail every rule; the ancestry diagnostic reports 2",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/034t30j35"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/04dshd728"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/04dshd728",
+          "gold": "https://ror.org/034t30j35",
+          "relation": "none"
+        }
+      ],
+      "expected_ancestry_distance": 2,
+      "expected_ancestry_distance_at_max_depth_1": null
+    },
+    {
+      "id": "assigned_id_not_in_dump",
+      "organisations": "A well-formed ROR id verified absent from the v2.13 dump assigned, University of Oxford gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/0zzzzzz99"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0zzzzzz99",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "not_in_dump"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "multi_affiliation_full_hit",
+      "organisations": "University of Oxford and John Radcliffe Hospital assigned, the same two gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110",
+          "https://ror.org/0080acb59"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/052gg0110",
+        "https://ror.org/0080acb59"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "correct",
+          "true_positives": 2,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "correct",
+          "true_positives": 2,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 2,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0080acb59",
+          "gold": "https://ror.org/0080acb59",
+          "relation": "exact"
+        },
+        {
+          "assigned": "https://ror.org/0080acb59",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "related"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/0080acb59",
+          "relation": "related"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "multi_affiliation_collapse",
+      "organisations": "University of Oxford alone assigned, University of Oxford and John Radcliffe Hospital gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110",
+          "https://ror.org/0080acb59"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "collapsed",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "collapsed",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "collapsed",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/0080acb59",
+          "relation": "related"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "multi_affiliation_collapse_through_hierarchy",
+      "organisations": "University of Oxford alone assigned, University of Oxford and Kennedy Institute of Rheumatology (its child) gold: one assigned id grounds both gold ids but can be matched to only one, so this stays a collapse under every rule",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110",
+          "https://ror.org/01ahsqc77"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "collapsed",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "collapsed",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "collapsed",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/01ahsqc77",
+          "relation": "parent_of_gold"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "over_assigned_university_and_institute",
+      "organisations": "University of Oxford and Kennedy Institute of Rheumatology assigned, University of Oxford alone gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/052gg0110",
+        "https://ror.org/01ahsqc77"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "over_assigned",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "over_assigned",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/01ahsqc77",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "child_of_gold"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "partial_one_right_one_wrong",
+      "organisations": "University of Oxford and Hokkaido University assigned, University of Oxford and John Radcliffe Hospital gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110",
+          "https://ror.org/0080acb59"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/052gg0110",
+        "https://ror.org/02e16g702"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/02e16g702",
+          "gold": "https://ror.org/0080acb59",
+          "relation": "none"
+        },
+        {
+          "assigned": "https://ror.org/02e16g702",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "none"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/0080acb59",
+          "relation": "related"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "multi_affiliation_hit_through_hierarchy",
+      "organisations": "John Radcliffe Hospital and University of Oxford assigned, Oxford University Hospitals NHS Trust and University of Oxford gold: the hospital stands in for its parent trust under the hierarchy rules",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/03h2bh287",
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/0080acb59",
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "correct",
+          "true_positives": 2,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 2,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/0080acb59",
+          "gold": "https://ror.org/03h2bh287",
+          "relation": "child_of_gold"
+        },
+        {
+          "assigned": "https://ror.org/0080acb59",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "related"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/03h2bh287",
+          "relation": "none"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "stale_mixed_with_wrong",
+      "organisations": "Kyushu Tokai University (inactive) and Hokkaido University assigned, Tokai University gold: not every ungrounded id is stale, so this is wrong, not stale",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/01p7qe739"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/00w0f8567",
+        "https://ror.org/02e16g702"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 2,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 2,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/00w0f8567",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "predecessor_of_gold"
+        },
+        {
+          "assigned": "https://ror.org/02e16g702",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "none"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_duplicate_beside_correct_id",
+      "organisations": "Kyushu Tokai University (inactive) and Tokai University assigned, Tokai University gold: the correct id is grounded, so the matching is not empty and the stale duplicate makes this partial under EXACT and PARENT_CHILD, not stale; under ANY_RELATIONSHIP both ids are grounded and the extra one is over-assignment. The predecessor relation is still recorded for the stale pair",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/01p7qe739"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/00w0f8567",
+        "https://ror.org/01p7qe739"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "over_assigned",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/00w0f8567",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "predecessor_of_gold"
+        },
+        {
+          "assigned": "https://ror.org/01p7qe739",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "stale_sibling_in_multi_affiliation",
+      "organisations": "Kyushu Tokai University (inactive) and University of Oxford assigned, Tokai University and University of Oxford gold: half the assignment is exactly right and the other half is the right institution under its old id. Partial under EXACT and PARENT_CHILD with the predecessor relation recorded; correct under ANY_RELATIONSHIP",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/01p7qe739",
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/00w0f8567",
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 2,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/00w0f8567",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "predecessor_of_gold"
+        },
+        {
+          "assigned": "https://ror.org/00w0f8567",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "none"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/01p7qe739",
+          "relation": "none"
+        },
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "empty_assignment",
+      "organisations": "Nothing assigned, University of Oxford gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110"
+        ]
+      },
+      "assigned": [],
+      "expected": {
+        "exact": {
+          "outcome": "no_assignment",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "parent_child": {
+          "outcome": "no_assignment",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "any_relationship": {
+          "outcome": "no_assignment",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "empty_assignment_multi_affiliation",
+      "organisations": "Nothing assigned, University of Oxford and John Radcliffe Hospital gold",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/052gg0110",
+          "https://ror.org/0080acb59"
+        ]
+      },
+      "assigned": [],
+      "expected": {
+        "exact": {
+          "outcome": "no_assignment",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "parent_child": {
+          "outcome": "no_assignment",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "any_relationship": {
+          "outcome": "no_assignment",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "gold_ambiguous_with_assignment",
+      "organisations": "University of Oxford assigned, gold adjudicated ambiguous",
+      "gold": {
+        "decision": "ambiguous",
+        "ror_ids": []
+      },
+      "assigned": [
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "gold_ambiguous",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "parent_child": {
+          "outcome": "gold_ambiguous",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "any_relationship": {
+          "outcome": "gold_ambiguous",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "gold_ambiguous_without_assignment",
+      "organisations": "Nothing assigned, gold adjudicated ambiguous",
+      "gold": {
+        "decision": "ambiguous",
+        "ror_ids": []
+      },
+      "assigned": [],
+      "expected": {
+        "exact": {
+          "outcome": "gold_ambiguous",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "parent_child": {
+          "outcome": "gold_ambiguous",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "any_relationship": {
+          "outcome": "gold_ambiguous",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "gold_no_ror_with_assignment",
+      "organisations": "University of Oxford assigned, gold adjudicated no_ror",
+      "gold": {
+        "decision": "no_ror",
+        "ror_ids": []
+      },
+      "assigned": [
+        "https://ror.org/052gg0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "gold_no_ror",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "parent_child": {
+          "outcome": "gold_no_ror",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "any_relationship": {
+          "outcome": "gold_no_ror",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "gold_no_ror_without_assignment",
+      "organisations": "Nothing assigned, gold adjudicated no_ror",
+      "gold": {
+        "decision": "no_ror",
+        "ror_ids": []
+      },
+      "assigned": [],
+      "expected": {
+        "exact": {
+          "outcome": "gold_no_ror",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "parent_child": {
+          "outcome": "gold_no_ror",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        },
+        "any_relationship": {
+          "outcome": "gold_no_ror",
+          "true_positives": null,
+          "false_positives": null,
+          "false_negatives": null
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "normalisation_bare_and_upper_case_ids",
+      "organisations": "University of Oxford as a bare id in gold and as an upper-case ror.org/ prefixed id in the assignment",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "052gg0110"
+        ]
+      },
+      "assigned": [
+        "ROR.ORG/052GG0110"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "correct",
+          "true_positives": 1,
+          "false_positives": 0,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/052gg0110",
+          "gold": "https://ror.org/052gg0110",
+          "relation": "exact"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    }
+  ]
+}
