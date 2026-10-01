@@ -16,11 +16,15 @@ The rules, each applied to one assigned id and one gold id:
   EXACT             the assigned id equals the gold id.
   PARENT_CHILD      exact, or the two ids are joined by a single direct
                     parent/child edge in either direction.
-  ANY_RELATIONSHIP  exact, or the two ids are joined by a single direct edge
-                    of any ROR type (parent, child, related, predecessor,
-                    successor) in either direction, where "predecessor" and
-                    "successor" are read along the whole successor chain (see
-                    "Successor chains" below).
+  ANY_RELATIONSHIP  exact, or the two ids are joined by a single direct
+                    parent, child or related edge in either direction.
+
+Under every rule the assigned id must also be active in the pinned release:
+an id that is inactive or withdrawn there, or absent from it, grounds nothing
+whatever edge joins it to the gold. Succession edges (predecessor, successor)
+make a hit under no rule. They are still read, along the whole chain, but
+only to classify an assignment as STALE rather than WRONG; see "Successor
+chains" and "Stale ids" below.
 
 Hierarchy and related edges are one hop by definition. Transitive closure over
 them is deliberately not a headline rule: closure over "related" edges is
@@ -57,20 +61,44 @@ organisation, plainly wrong) can be tabulated from the relations without
 re-running anything, and without it depending on which rule a reader prefers.
 Where a pair has edges of more than one type, the relation reported is the
 first in this order: exact, parent, child, predecessor, successor, related.
+That order never decides whether a dead id grounds (it never does, see "Stale
+ids"), so a dead id joined to the gold by both a hierarchy edge and a
+successor chain is reported under the hierarchy edge and is still stale; the
+ids an item was stale on are carried separately in
+:attr:`MatchResult.stale_assigned` so the taxonomy stays exact.
 
-Stale ids. A source that assigns a superseded id whose successor chain leads
-to the gold id (a renamed or merged institution, however many times) gets the
-distinct outcome STALE under EXACT and PARENT_CHILD, never a plain miss,
-because it is one of the error-taxonomy categories in the brief. Under
-ANY_RELATIONSHIP the successor chain is a qualifying relation, so by the
-rule's own definition the pair is a hit. That is a consequence of the design
-decision above, not a separate choice, and it means the stale category is
-only visible under the first two rules and in the relations.
+Stale ids. An assigned id that is not active in the pinned release never
+grounds under any rule: whatever edge joins it to the gold, it is a false
+positive, because the source asserted an identifier the registry no longer
+holds as live. STALE is the outcome when every assigned id is such a dead id
+and lies on a successor chain, of any length, to some gold id: the whole
+assignment is the right institution under superseded identifiers (a renamed
+or merged institution, however many times). It is reported under every rule,
+never a plain miss and never a hit, because it is one of the error-taxonomy
+categories in the brief and the reader is entitled to see it under whichever
+rule they prefer. A dead id with no chain to any gold id is simply wrong. The
+stale rate is published per source, and "stale credited as correct" is
+reported as a one-line sensitivity so a reader who disagrees with the policy
+can see what it costs each source.
+
+Gold labels name the active record. :func:`score_item` refuses a gold id
+whose status in the pinned release is not "active", naming the id, its status
+and its successor(s). That is a gold-standard integrity error, not a source
+error, and the review app enforces the same thing at labelling time. It does
+not follow that a well-formed gold standard produces PREDECESSOR_OF_GOLD
+only: v2.13 holds 16 active records with a successor edge to another active
+record (De La Salle University 04xftk194 to De La Salle Medical and Health
+Sciences Institute 012mgrb02; Academisch Ziekenhuis Rotterdam 00xtwy257 to
+Erasmus MC 018906e22), so either succession relation can arise between two
+live ids. Nothing is dead there, so neither is stale: the assignment is
+WRONG unless a hierarchy edge or an exact match grounds it, in which case
+that is the relation reported.
 
 Set-level scoring. Gold labels can be sets (multi-affiliation items) and so can
 assignments. Let G be the gold set, A the assigned set, and M the size of a
-maximum bipartite matching between A and G where a pair may be matched if it
-satisfies the rule. An assigned id is "grounded" if it satisfies the rule with
+maximum bipartite matching between A and G where a pair may be matched if the
+assigned id is active and the pair satisfies the rule. An assigned id is
+"grounded" if it is active in the pinned release and satisfies the rule with
 at least one gold id. Then, in order:
 
   NO_ASSIGNMENT  A is empty. A coverage failure, never an accuracy failure: a
@@ -90,28 +118,36 @@ at least one gold id. Then, in order:
                  source listed more ids than the author did, all of them in
                  the gold ids' one-hop neighbourhood (for example both a
                  university and its institute where the author wrote the
-                 university). Impossible under EXACT.
+                 university). Impossible under EXACT. The extra ids are false
+                 positives under every rule; see gate decision 3.
   STALE          no assigned id is grounded (M == 0) and every assigned id is
-                 the predecessor of some gold id. The whole assignment is the
-                 right institution under old identifiers and nothing else.
+                 non-active in the pinned release and a predecessor, along a
+                 chain of any length, of some gold id. The whole assignment
+                 is the right institution under dead identifiers and nothing
+                 else. Because a dead id grounds nothing under any rule, an
+                 assignment that is STALE under one rule is STALE under all
+                 three, with the same counts, whether or not the dead id also
+                 carries a hierarchy or related edge to the gold.
   PARTIAL        at least one assigned id is ungrounded and M > 0: some of the
                  assignment is right and some of it is wrong. This includes an
                  assignment that mixes correct ids with a stale duplicate or a
-                 stale sibling; the predecessor relation is still recorded for
-                 that pair, so the stale id stays countable in the error
-                 taxonomy without the item being labelled "stale id" when
-                 half of it was right. (Under ANY_RELATIONSHIP the same
-                 assignment is OVER_ASSIGNED or CORRECT, since the stale id
-                 is grounded there.)
-  WRONG          at least one assigned id is ungrounded and M == 0.
+                 stale sibling; the stale id is still recorded in
+                 stale_assigned, so it stays countable in the error taxonomy
+                 without the item being labelled "stale id" when half of it
+                 was right.
+  WRONG          at least one assigned id is ungrounded and M == 0. This is
+                 where a dead id with no chain to any gold id lands, and
+                 where an active id whose only link to the gold is a
+                 succession edge lands.
 
 Element counts. Every outcome in CORRECT, COLLAPSED, OVER_ASSIGNED, STALE,
 PARTIAL and WRONG carries true_positives = M, false_positives = |A| - M and
-false_negatives = |G| - M. NO_ASSIGNMENT, GOLD_AMBIGUOUS and GOLD_NO_ROR carry
-None for all three. Accuracy metrics (precision, recall, F1) are therefore
-computed over assigned, scorable items only: :func:`sum_element_counts` sums
-the counts of exactly those items and refuses to mix rules. Coverage, the
-share of scorable items on which a source assigned anything at all
+false_negatives = |G| - M. NO_ASSIGNMENT and GOLD_AMBIGUOUS carry None for all
+three. GOLD_NO_ROR carries None when nothing was assigned and (0, |A|, 0) when
+something was; see the next paragraph. Accuracy metrics (precision, recall,
+F1) are therefore micro-averaged by :func:`sum_element_counts` over exactly
+the scores that carry counts, and it refuses to mix rules. Coverage, the share
+of scorable items on which a source assigned anything at all
 (:attr:`MatchResult.has_assignment`), is the complementary published figure
 and is always reported next to accuracy. Folding abstentions into recall by
 giving them false negatives would let two analysts publish two different
@@ -119,40 +155,64 @@ recall figures for the same source; the None values make that impossible to
 do by accident.
 
 Ambiguous and no_ror gold labels are first-class labels, not failures to label.
-An item whose gold decision is ambiguous scores GOLD_AMBIGUOUS and one whose
-gold decision is no_ror scores GOLD_NO_ROR, under every rule, whatever the
-source assigned, with no element counts. Neither counts as correct or
-incorrect anywhere in this module. The assignment is still recorded on the
-result, so the rate at which a source assigns something to an item the
-annotator judged to have no ROR can be reported separately.
+An item whose gold decision is ambiguous scores GOLD_AMBIGUOUS under every
+rule, whatever the source assigned, with no element counts: the evidence does
+not say what the right answer was, so nothing the source did can be judged.
+An item whose gold decision is no_ror scores GOLD_NO_ROR under every rule, so
+the rate is reportable, and the counts depend on what the source did. An
+empty assignment carries None: abstaining where no ROR record exists is the
+right answer, and it is not a coverage failure either, which is why the
+outcome is GOLD_NO_ROR and not NO_ASSIGNMENT. A non-empty assignment is a
+precision failure and carries true_positives 0, false_positives equal to the
+number of distinct normalised assigned ids, and false_negatives 0 (there is no
+gold set to miss). Neither GOLD_AMBIGUOUS nor GOLD_NO_ROR is scorable: neither
+belongs in a coverage denominator, because an abstention on either is not a
+failure to cover.
 
-Gold ids outside the release. :func:`relation_between` raises ValueError when a
-gold id is absent from the pinned release, and this module keeps doing so on
-purpose. The remedy belongs at labelling time: the review app refuses ids
-outside the pinned release, so a frozen gold standard can never name an
-organisation the scorer cannot see. An error here therefore means that guard
-was bypassed, which is a gold-standard integrity problem, not a source error,
-and silently scoring around it would launder a broken gold standard into a
-published number.
+Gold ids outside the release. :func:`score_item` raises ValueError when a gold
+id is absent from the pinned release, as does :func:`relation_between`, and
+this module keeps doing so on purpose. The remedy belongs at labelling time:
+the review app refuses ids outside the pinned release, so a frozen gold
+standard can never name an organisation the scorer cannot see. An error here
+therefore means that guard was bypassed, which is a gold-standard integrity
+problem, not a source error, and silently scoring around it would launder a
+broken gold standard into a published number. A gold id that is in the
+release but not active is refused for the same reason (see "Gold labels name
+the active record" above).
 
-Pending gate decisions. The following are implemented one way for now and
-listed here so they are not mistaken for settled design. Each is a project
-owner decision and changing it is a change to the stated design, applied to
-every source equally:
+Gate decisions, settled 2026-10-01. Each was a project owner decision, applied
+to every source equally, and each is pinned by a golden case:
 
-  1. Whether ANY_RELATIONSHIP should exclude predecessor and successor edges
-     so that stale ids stay a visible error under all three rules. Currently
-     they count as hits under that rule.
-  2. Whether an assignment made against a no_ror gold item is a precision
-     failure. Currently it scores GOLD_NO_ROR and is reported as its own
-     rate only; treating it as WRONG would penalise sources that assign more
-     aggressively, not treating it so lets a source invent affiliations at no
-     cost.
-  3. Whether OVER_ASSIGNED counts as a hit under the hierarchy rules.
-     Currently it does not, and the extra ids count as false positives; it is
-     a separate outcome so either reading can be computed.
-  4. The maximum depth the ancestry-distance diagnostic is reported at.
-     :data:`DEFAULT_ANCESTRY_MAX_DEPTH` is a placeholder chosen without data.
+  1. Succession edges never make a hit under any rule, so ANY_RELATIONSHIP
+     grounds an assignment only through exact, parent, child or related
+     edges and STALE is visible under all three rules. Reasoning: a stale id
+     is a real, countable error in the brief's taxonomy, and a rule that
+     hides it would reward a source for never refreshing its registry copy.
+     Tightened 2026-10-01 after a verifier showed that the relation
+     priority order was deciding whether a dead id grounds (19 real dead
+     records with a hierarchy edge beside their chain grounded under the
+     hierarchy rules, 6 with a related edge did not): an assigned id that is
+     not active in the pinned release now grounds under no rule, so STALE
+     means exactly a dead id on a chain to the gold, and a live predecessor
+     of the gold is wrong rather than stale. Gold labels must name the active
+     record, so a non-active gold id is an integrity error and the scorer
+     raises rather than warns.
+  2. An assignment made against a no_ror gold item is a precision failure,
+     counted as false positives under GOLD_NO_ROR, while an empty assignment
+     there carries no counts. Reasoning: a source that invents an affiliation
+     where the annotator found no ROR record has asserted something wrong,
+     and not charging for it would let aggressive assignment come at no
+     cost; abstaining there is the right answer and must not be reported as
+     a coverage failure.
+  3. OVER_ASSIGNED stays a false positive under every rule, with its rate
+     published. Reasoning: the extra ids are assertions the author did not
+     make, and hierarchy tolerance is about which level of one institution
+     was chosen, not about asserting more institutions.
+  4. The ancestry-distance diagnostic keeps :data:`DEFAULT_ANCESTRY_MAX_DEPTH`
+     and the distribution to that depth is what gets reported. Reasoning: the
+     diagnostic is a sensitivity analysis rather than a rule, so one fixed
+     reporting depth shared by every source is all it needs, and stating the
+     depth here lets a reader rerun the diagnostic at another.
 
 What this module refuses to do. The scoring function takes a gold label, an
 assigned set and the ROR graph. It does not take a source identifier, and
@@ -256,29 +316,32 @@ class Relation(StrEnum):
     EXACT = "exact"
     PARENT_OF_GOLD = "parent_of_gold"  # the assigned id is the gold id's parent
     CHILD_OF_GOLD = "child_of_gold"  # the assigned id is the gold id's child
-    PREDECESSOR_OF_GOLD = "predecessor_of_gold"  # stale: a successor chain leads to the gold id
-    SUCCESSOR_OF_GOLD = "successor_of_gold"  # a successor chain leads from the gold id
+    # A successor chain leads to the gold id. Stale when the assigned id is
+    # dead; a live predecessor of the gold (16 active records in v2.13 carry a
+    # successor edge to another active record) is wrong, not stale.
+    PREDECESSOR_OF_GOLD = "predecessor_of_gold"
+    # A successor chain leads from the gold id. A dead gold id is refused by
+    # score_item, so this arises between two live records, through the same
+    # 16 active-with-successor records, and the outcome is wrong unless a
+    # hierarchy edge also exists (which would then be the relation reported).
+    SUCCESSOR_OF_GOLD = "successor_of_gold"
     RELATED = "related"
     NONE = "none"  # both ids are in the release, no direct edge joins them
     NOT_IN_DUMP = "not_in_dump"  # the assigned id is absent from the pinned release
 
 
-# Which relations satisfy which rule. The STALE outcome depends on
-# PREDECESSOR_OF_GOLD being absent from PARENT_CHILD; see the module docstring.
+# Which relations satisfy which rule. Succession relations are in none of them
+# (gate decision 1). Satisfying a rule is necessary for grounding, not
+# sufficient: _score_rule also requires the assigned id to be active in the
+# pinned release, which is what keeps STALE visible under all three rules. See
+# the module docstring.
 _RULE_RELATIONS: Mapping[MatchRule, frozenset[Relation]] = {
     MatchRule.EXACT: frozenset({Relation.EXACT}),
     MatchRule.PARENT_CHILD: frozenset(
         {Relation.EXACT, Relation.PARENT_OF_GOLD, Relation.CHILD_OF_GOLD}
     ),
     MatchRule.ANY_RELATIONSHIP: frozenset(
-        {
-            Relation.EXACT,
-            Relation.PARENT_OF_GOLD,
-            Relation.CHILD_OF_GOLD,
-            Relation.PREDECESSOR_OF_GOLD,
-            Relation.SUCCESSOR_OF_GOLD,
-            Relation.RELATED,
-        }
+        {Relation.EXACT, Relation.PARENT_OF_GOLD, Relation.CHILD_OF_GOLD, Relation.RELATED}
     ),
 }
 
@@ -295,11 +358,15 @@ class Outcome(StrEnum):
     GOLD_NO_ROR = "gold_no_ror"
 
 
-# The gold side cannot be scored: these outcomes are neither hits nor misses.
+# The gold side is not resolved: these outcomes are never hits and never belong
+# in a coverage denominator. GOLD_NO_ROR can still carry false positives.
 UNSCORED_OUTCOMES = frozenset({Outcome.GOLD_AMBIGUOUS, Outcome.GOLD_NO_ROR})
-# Outcomes that carry no element counts. NO_ASSIGNMENT is scorable (the gold
+# Outcomes that never carry element counts. NO_ASSIGNMENT is scorable (the gold
 # is resolved) but is coverage, not accuracy; see the module docstring.
-UNCOUNTED_OUTCOMES = UNSCORED_OUTCOMES | {Outcome.NO_ASSIGNMENT}
+UNCOUNTED_OUTCOMES = frozenset({Outcome.GOLD_AMBIGUOUS, Outcome.NO_ASSIGNMENT})
+# Outcomes that always carry element counts. GOLD_NO_ROR is in neither set: it
+# carries counts exactly when something was assigned (gate decision 2).
+COUNTED_OUTCOMES = frozenset(set(Outcome) - UNCOUNTED_OUTCOMES - {Outcome.GOLD_NO_ROR})
 
 
 @dataclass(frozen=True)
@@ -337,6 +404,11 @@ class PairRelation:
     relation: Relation
 
     def satisfies(self, rule: MatchRule) -> bool:
+        """Whether the relation alone is a qualifying one under the rule.
+
+        Grounding also needs the assigned id to be active in the pinned
+        release; :func:`_score_rule` applies that on top of this.
+        """
         return self.relation in _RULE_RELATIONS[rule]
 
 
@@ -344,10 +416,12 @@ class PairRelation:
 class RuleScore:
     """One item under one rule.
 
-    Counts are None exactly when the outcome is in UNCOUNTED_OUTCOMES: the
-    gold side is unscorable, or nothing was assigned. The constructor enforces
-    that, so a count can never be summed from an outcome that must not have
-    one.
+    Counts are all None or all present. They are always present for an
+    outcome in COUNTED_OUTCOMES, never present for one in UNCOUNTED_OUTCOMES
+    (the gold is ambiguous, or nothing was assigned), and for GOLD_NO_ROR
+    present exactly when something was assigned, in which case they can only
+    be false positives. The constructor enforces all of that, so a count can
+    never be summed from a score that must not have one.
     """
 
     rule: MatchRule
@@ -358,10 +432,23 @@ class RuleScore:
 
     def __post_init__(self) -> None:
         counts = (self.true_positives, self.false_positives, self.false_negatives)
-        if self.counted and any(count is None for count in counts):
+        present = [count is not None for count in counts]
+        if self.outcome in COUNTED_OUTCOMES and not all(present):
             raise ValueError(f"a {self.outcome.value} score must carry element counts")
-        if not self.counted and any(count is not None for count in counts):
+        if self.outcome in UNCOUNTED_OUTCOMES and any(present):
             raise ValueError(f"a {self.outcome.value} score must not carry element counts")
+        if any(present) and not all(present):
+            raise ValueError(f"a {self.outcome.value} score must carry all three counts or none")
+        # Gate decision 2: an assignment against a no_ror gold is only ever
+        # false positives, and only when something was in fact assigned.
+        if (
+            self.outcome is Outcome.GOLD_NO_ROR
+            and all(present)
+            and (self.true_positives != 0 or self.false_negatives != 0 or not self.false_positives)
+        ):
+            raise ValueError(
+                f"a gold_no_ror score with counts carries only false positives, got {counts}"
+            )
 
     @property
     def scorable(self) -> bool:
@@ -371,7 +458,7 @@ class RuleScore:
     @property
     def counted(self) -> bool:
         """The item carries element counts, so it belongs in an accuracy denominator."""
-        return self.outcome not in UNCOUNTED_OUTCOMES
+        return self.true_positives is not None
 
     @property
     def hit(self) -> bool:
@@ -386,16 +473,21 @@ class ElementCounts:
     true_positives: int
     false_positives: int
     false_negatives: int
-    items: int  # how many scores contributed; abstentions and unscorable gold are not among them
+    # How many scores contributed. Abstentions and ambiguous gold are not among
+    # them; a no_ror gold item with an assignment is (as false positives only).
+    items: int
 
 
 def sum_element_counts(rule: MatchRule, scores: Iterable[RuleScore]) -> ElementCounts:
-    """Sum element counts over assigned, scorable items under one rule.
+    """Sum element counts over the counted items under one rule, for micro-averaging.
 
-    NO_ASSIGNMENT, GOLD_AMBIGUOUS and GOLD_NO_ROR scores are skipped, so an
-    abstention never reaches a recall denominator here. Coverage is reported
-    from :attr:`MatchResult.has_assignment` instead. A score under a different
-    rule is an error, not something to average over.
+    NO_ASSIGNMENT and GOLD_AMBIGUOUS scores are skipped, as is GOLD_NO_ROR
+    with an empty assignment, so an abstention never reaches a recall
+    denominator here; coverage is reported from
+    :attr:`MatchResult.has_assignment` instead. GOLD_NO_ROR with an assignment
+    contributes its false positives, so precision pays for an invented
+    affiliation while recall is untouched (gate decision 2). A score under a
+    different rule is an error, not something to average over.
     """
     true_positives = false_positives = false_negatives = items = 0
     for score in scores:
@@ -419,6 +511,13 @@ class MatchResult:
     assigned: frozenset[str]
     relations: tuple[PairRelation, ...]
     by_rule: Mapping[MatchRule, RuleScore]
+    # The assigned ids that are non-active in the pinned release and lie on a
+    # successor chain to some gold id. Rule-independent, like the relations,
+    # and the item is STALE exactly when this is the whole non-empty
+    # assignment. Carried separately because the relation reported for such
+    # an id can be a hierarchy edge (see the priority order in the module
+    # docstring), so the relations alone would undercount stale ids.
+    stale_assigned: frozenset[str] = frozenset()
 
     @property
     def has_assignment(self) -> bool:
@@ -563,16 +662,53 @@ def _maximum_matching(
     return sum(1 for a in assigned if augment(a, set()))
 
 
+def _active_assigned_ids(assigned: Iterable[str], graph: RorGraph) -> frozenset[str]:
+    """The assigned ids the pinned release holds with status "active".
+
+    An id the release does not hold at all is not active in it either, so it
+    is left out here and grounds nothing, the same as an inactive or
+    withdrawn one.
+    """
+    return frozenset(a for a in assigned if a in graph and graph.status(a) == "active")
+
+
+def _stale_assigned_ids(
+    assigned: Iterable[str], gold: Iterable[str], active: frozenset[str], graph: RorGraph
+) -> frozenset[str]:
+    """The non-active assigned ids with a successor chain, of any length, to some gold id.
+
+    Read from the succession index directly rather than from the recorded
+    relations, because a dead id with a hierarchy edge beside its chain is
+    reported under the hierarchy edge (see the priority order in the module
+    docstring) and is stale all the same.
+    """
+    succession = succession_index_for(graph)
+    gold_ids = tuple(gold)
+    return frozenset(
+        a
+        for a in assigned
+        if a not in active and any(succession.supersedes(a, g) for g in gold_ids)
+    )
+
+
 def _score_rule(
     rule: MatchRule,
     assigned: tuple[str, ...],
     gold: tuple[str, ...],
     relations: tuple[PairRelation, ...],
+    active: frozenset[str],
+    stale: frozenset[str],
 ) -> RuleScore:
     if not assigned:
         # Coverage, not accuracy: no element counts, see the module docstring.
         return RuleScore(rule, Outcome.NO_ASSIGNMENT, None, None, None)
-    ok = {(pair.assigned, pair.gold) for pair in relations if pair.satisfies(rule)}
+    # Grounding needs a live id and a qualifying relation. A non-active
+    # assigned id is a false positive whatever edge joins it to the gold.
+    ok = {
+        (pair.assigned, pair.gold)
+        for pair in relations
+        if pair.assigned in active and pair.satisfies(rule)
+    }
     matched = _maximum_matching(assigned, gold, ok)
     counts = (matched, len(assigned) - matched, len(gold) - matched)
     grounded = {a for a, _ in ok}
@@ -583,11 +719,10 @@ def _score_rule(
         if len(assigned) > len(gold):
             return RuleScore(rule, Outcome.OVER_ASSIGNED, *counts)
         return RuleScore(rule, Outcome.CORRECT, *counts)
-    stale = {
-        pair.assigned for pair in relations if pair.relation is Relation.PREDECESSOR_OF_GOLD
-    }
     # STALE needs an empty matching: when M == 0 nothing is grounded, so the
     # ungrounded ids are the whole assignment and all of them must be stale.
+    # Stale ids are dead and so never ground, which is why this does not
+    # depend on the rule.
     if matched == 0 and all(a in stale for a in ungrounded):
         return RuleScore(rule, Outcome.STALE, *counts)
     if matched > 0:
@@ -595,32 +730,62 @@ def _score_rule(
     return RuleScore(rule, Outcome.WRONG, *counts)
 
 
+def _score_unresolved_gold(rule: MatchRule, gold: GoldLabel, assigned: frozenset[str]) -> RuleScore:
+    """GOLD_AMBIGUOUS or GOLD_NO_ROR, with the counts gate decision 2 gives them.
+
+    Ambiguous gold carries no counts whatever was assigned. No_ror gold
+    carries none for an empty assignment (abstaining is the right answer) and
+    one false positive per distinct normalised assigned id otherwise.
+    """
+    if gold.decision is Decision.AMBIGUOUS:
+        return RuleScore(rule, Outcome.GOLD_AMBIGUOUS, None, None, None)
+    if not assigned:
+        return RuleScore(rule, Outcome.GOLD_NO_ROR, None, None, None)
+    return RuleScore(rule, Outcome.GOLD_NO_ROR, 0, len(assigned), 0)
+
+
+def _require_active_gold_id(gold_id: str, graph: RorGraph) -> None:
+    """Refuse a gold id the pinned release does not know or does not hold as active.
+
+    Either is a gold-standard integrity error, not a source error, and the
+    review app is meant to have refused it at labelling time; see the module
+    docstring. The successors are named so the owner can see which active
+    record the label should have carried.
+    """
+    if gold_id not in graph:
+        raise ValueError(f"gold ROR id {gold_id} is not in the pinned ROR release")
+    status = graph.status(gold_id)
+    if status == "active":
+        return
+    successors = sorted(succession_index_for(graph).successors_of(gold_id))
+    superseded_by = ", ".join(successors) if successors else "no recorded successor"
+    log.error("gold_ror_id_not_active", ror_id=gold_id, status=status, successors=successors)
+    raise ValueError(
+        f"gold ROR id {gold_id} has status {status} in the pinned ROR release "
+        f"(successor: {superseded_by}); gold labels must name the active record"
+    )
+
+
 def score_item(gold: GoldLabel, assigned: Iterable[str], graph: RorGraph) -> MatchResult:
     """Score one item under all three rules. The only evaluation path.
 
     Takes no source identifier, by design. See the module docstring for every
-    definition this applies.
+    definition this applies. Raises ValueError for a gold id that is outside
+    the pinned release or not active in it.
     """
     assigned_ids = normalise_ror_ids(assigned)
     if not gold.resolved:
-        outcome = (
-            Outcome.GOLD_AMBIGUOUS if gold.decision is Decision.AMBIGUOUS else Outcome.GOLD_NO_ROR
-        )
         return MatchResult(
             gold=gold,
             assigned=assigned_ids,
             relations=(),
-            by_rule={rule: RuleScore(rule, outcome, None, None, None) for rule in MatchRule},
+            by_rule={rule: _score_unresolved_gold(rule, gold, assigned_ids) for rule in MatchRule},
         )
 
     assigned_sorted = tuple(sorted(assigned_ids))
     gold_sorted = tuple(sorted(gold.ror_ids))
     for gold_id in gold_sorted:
-        if gold_id in graph and graph.status(gold_id) != "active":
-            # The gold standard should only ever name live organisations;
-            # anything else is worth seeing in the run log before it shapes a
-            # SUCCESSOR_OF_GOLD relation.
-            log.warning("gold_ror_id_not_active", ror_id=gold_id, status=graph.status(gold_id))
+        _require_active_gold_id(gold_id, graph)
     relations = tuple(
         PairRelation(a, g, relation_between(a, g, graph))
         for a in assigned_sorted
@@ -629,13 +794,17 @@ def score_item(gold: GoldLabel, assigned: Iterable[str], graph: RorGraph) -> Mat
     for pair in relations:
         if pair.relation is Relation.NOT_IN_DUMP:
             log.warning("assigned_ror_id_not_in_dump", ror_id=pair.assigned)
+    active = _active_assigned_ids(assigned_sorted, graph)
+    stale = _stale_assigned_ids(assigned_sorted, gold_sorted, active, graph)
     return MatchResult(
         gold=gold,
         assigned=assigned_ids,
         relations=relations,
         by_rule={
-            rule: _score_rule(rule, assigned_sorted, gold_sorted, relations) for rule in MatchRule
+            rule: _score_rule(rule, assigned_sorted, gold_sorted, relations, active, stale)
+            for rule in MatchRule
         },
+        stale_assigned=stale,
     )
 
 

@@ -120,6 +120,11 @@ script, snapshot, filter, and row counts behind every figure and table.
 palette (`viz/palette.js`), a self-contained figure template, SVG and 2x
 PNG export in light and dark, per-figure CSV, alt text, and two guards (size
 budget; no reference to anything that would be fetched at render time).
+Statistical figures vendor Observable Plot inline: its UMD bundle, D3
+included, measured 209KB raw and 69KB gzipped at v0.6.17, comfortably inside
+the 500KB per-figure budget, so no figure ever loads a library from a CDN.
+Bespoke figures (the hard-cases gallery, the error Sankey) are hand-written
+SVG and vanilla JS.
 `uv run scripts/figure_selftest.py` exercises the whole path on obviously
 synthetic input and writes to `outputs/figures/_selftest/`, which is
 gitignored and never deployed. Directories under `outputs/figures/` whose

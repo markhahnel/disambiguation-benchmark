@@ -77,6 +77,24 @@ IDs outside the release), so such instances can only be labelled `no_ror`
 or `ambiguous`. That slightly under-states what the live registry could
 resolve, identically for every source.
 
+Succession is read from whichever end of the edge the registry wrote it
+on, in the review UI and the scorer alike, because the pinned release
+asserts dozens of succession edges from one end only. A dead record whose
+only live successor sits outside the pinned release (none in v2.13, but a
+later release could create one) is labelled `no_ror` in this gold
+standard even though a newer registry would resolve it.
+
+A second consequence, from the gate decision that gold names the active
+record: a source that deliberately preserves the historical affiliation
+(the institution's name as it was when the paper was published) scores
+`stale` on renamed and merged institutions, where a source that
+re-maps everything to the current record scores `correct`. That is a
+policy choice about what "right" means, not a fact about the data. It
+disfavours historical fidelity, it applies to every source identically,
+the stale rate is published on its own, and the one-line "stale credited
+as correct" sensitivity shows what the alternative policy would do to each
+source's numbers.
+
 ## 8. Stratum routing heuristics are imperfect
 
 Script detection, token lists, and multi-affiliation detection route

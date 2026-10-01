@@ -43,20 +43,31 @@ corpus coverage as such, and we say so in the post.
 A large share of apparent errors are hierarchy choices, not errors: a
 hospital that is a ROR child of a university, an institute inside a national
 research council. Every result is therefore computed and published under
-three rules, with no primary rule declared. Hierarchy edges are **one hop**,
-by definition, over the relationship edges in the pinned ROR release:
+three rules, with no primary rule declared. All three are **one hop**, by
+definition, over the hierarchy edges in the pinned ROR release:
 
 1. **Exact**: assigned ROR ID equals gold ROR ID.
 2. **Parent-child**: exact, or one direct parent or child edge joins the
    assigned ID and the gold ID, in either direction.
 3. **Any-relationship**: exact, or one direct parent, child or related edge
-   joins them in either direction, or one ID is a predecessor or successor
-   of the other along the ROR succession chain, of any length.
+   joins them, in either direction.
 
-Succession is the one place a chain is followed: a sequence of renames and
-mergers is a single institution's identity over time, the edges are directed
-and short, and nothing degenerate can happen. Hierarchy and "related" edges
-are never chained.
+Succession edges (predecessor, successor) never make a hit under any rule,
+and **an assigned ID that is not active in the pinned release never
+grounds under any rule**, whatever edges it carries. Gold labels name the
+active record, so for a renamed or merged institution the gold is the
+successor. A source that reports a dead identifier lying on the succession
+chain to the gold scores `stale` under all three rules; a dead identifier
+on no such chain is `wrong`. Succession chains are followed, to any length,
+only to make that classification: a sequence of renames is one
+institution's identity over time, the edges are directed and short, and
+nothing degenerate can happen. The pinned release also holds a handful of
+active records that carry successor edges to other active records; those
+are not stale (nothing is dead) and ground only through an exact match or
+a hierarchy edge. The stale rate is published per source, and "stale
+credited as correct" is reported as a one-line sensitivity, so a reader who
+disagrees with the policy can see exactly what it costs each source.
+Hierarchy and "related" edges are never chained.
 
 Transitive closure is deliberately not a headline rule. Closure over ROR's
 "related" edges is degenerate: it would eventually connect most of a national
@@ -87,22 +98,27 @@ larger: the multi-affiliation collapse), `over_assigned`, `stale` (no
 assigned ID grounded, and every assigned ID is a predecessor, through any
 length of successor chain, of a gold ID: a renamed or merged institution
 reported under its old identifier), `partial`, `wrong`, `no_assignment`,
-`gold_ambiguous`, and `gold_no_ror`. The last three carry no element counts:
-an abstention is a **coverage** failure and is reported alongside accuracy,
-never folded into recall, and ambiguous or no-ROR gold items are reported as
-their own rates. The pairwise relation between each assigned and gold ID is
-recorded independently of the rule, so the error taxonomy is tabulated once,
-not once per rule.
+`gold_ambiguous`, and `gold_no_ror`. An abstention (`no_assignment`) carries
+no element counts: it is a **coverage** failure, reported alongside accuracy
+and never folded into recall. Ambiguous gold items are unscorable and
+reported as their own rate. A `no_ror` gold item scores every ID a source
+assigns to it as a false positive, because a ROR ID assigned where no ROR
+record exists necessarily names a different organisation; a source that
+abstains there is right, and that is neither a coverage nor an accuracy
+failure. `over_assigned` (every assigned ID grounded, more assigned than
+gold) is a false positive for the extra IDs under every rule: hierarchy
+tolerance is about which level of one institution a source chose, not about
+asserting institutions the author did not list. Its rate is published. The
+pairwise relation between each assigned and gold ID is recorded
+independently of the rule, so the error taxonomy is tabulated once, not
+once per rule.
 
-**Pending gate decisions**, implemented one way for now and listed here so
-they are not mistaken for settled design: whether rule 3 should exclude
-predecessor and successor edges so that stale IDs stay a visible error under
-all three rules (currently they count as hits under rule 3); whether an
-assignment made against a `no_ror` gold item counts as a precision failure
-(currently reported as its own rate only); whether `over_assigned` counts as
-a hit under the hierarchy rules (currently it does not, and the extra IDs
-count as false positives); and the reporting depth of the ancestry
-diagnostic.
+**Gate decisions, settled 2026-10-01.** The four choices above (succession
+never a hit; `no_ror` assignments as precision failures; over-assignment as
+false positives; ancestry diagnostic reported to depth 5) were implemented
+one way during Phase 0, flagged as open, and settled before any gold label
+existed. They apply identically to every source and none was made after
+seeing any source's output.
 
 ### Sampling frame and strata
 
@@ -152,6 +168,11 @@ Review UI design choices that matter methodologically:
   selected ROR set with the LLM-proposed set.
 - `ambiguous` and `no_ror` are first-class labels. An ambiguous rate per
   stratum is a finding; forcing a choice would manufacture false certainty.
+- Gold IDs must be active in the pinned ROR release. The UI refuses an
+  inactive or withdrawn ID and names the first active successor to pick
+  instead. Where a dead record has no active successor at all (the pinned
+  release has a few dozen such chains), the organisation has no active ROR
+  record and the item is labelled `no_ror`.
 - Multi-affiliation items take a ROR set, not a single ID.
 - Labelling time per item is recorded; the time distribution across strata
   is itself a finding about which cases are genuinely hard.

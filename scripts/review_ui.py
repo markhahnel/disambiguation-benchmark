@@ -6,10 +6,15 @@ item_ids are untouched, so relaunching never loses labels.
 
 If config/ror_dump.yaml exists, the pinned ROR release it names is loaded
 (and hash-verified) and every label is checked against it: a selected id the
-release does not contain is refused, and ROR search results it does not
-contain are hidden, so the frozen gold standard can never cite an
-organisation the scorer cannot see. Without the pin the UI runs unchecked and
-says so at startup; that is only acceptable for the demo data.
+release does not contain is refused, a selected id that is not active in it
+(superseded or withdrawn) is refused naming its active successor, with
+succession read from either end of the edge exactly as the scorer reads it,
+and ROR search results the release does not contain are hidden, so the frozen gold standard
+can never cite an organisation the scorer cannot see or a record the scorer
+would reject as not active. Records that are not active stay visible in
+search, so a historical name can still be looked up and its successor read
+off the candidate card. Without the pin the UI runs unchecked and says so at
+startup; that is only acceptable for the demo data.
 
 Usage:
   uv run scripts/review_ui.py --items data/interim/pilot_items.jsonl \
@@ -100,7 +105,9 @@ def startup_banner(port: int, pin: RorDumpPin | None) -> str:
     else:
         lines.append(
             f"Labels are checked against pinned ROR release {pin.version} "
-            f"({pin.publication_date}): ids outside it are refused."
+            f"({pin.publication_date}): ids outside it are refused, and so are ids that are "
+            "not active in it (a gold label names the active successor instead, with "
+            "succession read from either end of the edge as the scorer reads it)."
         )
     return "\n".join(f"  {line}" for line in lines)
 

@@ -1,5 +1,5 @@
 {
-  "_comment": "Golden file for src/disambig/matching.py. Every organisation in `graph` is a real record from the pinned ROR data dump (version below), with its display name, status, location and complete relationship list copied unmodified; names and locations are carried for the reader only and are not consulted by the matcher. The graph is sparse like a hand-extracted subgraph: edges may name ids with no record of their own. Every expectation in `cases` was derived by hand from those relationship lists and the definitions in the module docstring; each case names its organisations in `organisations`. The one id not in the dump, https://ror.org/0zzzzzz99, was verified absent from all 141,528 records of the pinned release. Element counts are null wherever the module docstring says an outcome carries none (no_assignment, gold_ambiguous, gold_no_ror).",
+  "_comment": "Golden file for src/disambig/matching.py. Every organisation in `graph` is a real record from the pinned ROR data dump (version below), with its display name, status, location and complete relationship list copied unmodified; names and locations are carried for the reader only and are not consulted by the matcher; status is consulted, for gold ids (a non-active gold id is refused) and for assigned ids (a non-active assigned id never grounds under any rule, and is stale exactly when a successor chain leads from it to a gold id). The graph is sparse like a hand-extracted subgraph: edges may name ids with no record of their own. Every expectation in `cases` was derived by hand from those relationship lists and the definitions in the module docstring; each case names its organisations in `organisations`. The one id not in the dump, https://ror.org/0zzzzzz99, was verified absent from all 141,528 records of the pinned release. Element counts are null wherever the module docstring says an outcome carries none (no_assignment, gold_ambiguous, and gold_no_ror with an empty assignment); gold_no_ror with an assignment carries one false positive per distinct normalised assigned id and nothing else. A case with `expected_error` in place of `expected` is one the scorer must refuse: `type` is the exception class and every string in `mentions` must appear in its message. Its `expected_relations` are what relation_between still reports for the pairs, since the relation stays computable for diagnostics even though score_item will not score the item.",
   "ror_dump_version": "v2.13",
   "ror_dump_publication_date": "2026-09-22",
   "graph": {
@@ -23,6 +23,18 @@
         "related": [
           "https://ror.org/04v2twj65",
           "https://ror.org/052gg0110"
+        ]
+      }
+    },
+    "https://ror.org/008n7pv89": {
+      "name": "University of Plymouth",
+      "status": "active",
+      "city": "Plymouth",
+      "country": "United Kingdom",
+      "relationships": {
+        "related": [
+          "https://ror.org/00v5h4y49",
+          "https://ror.org/03jrh3t05"
         ]
       }
     },
@@ -52,6 +64,18 @@
       "relationships": {
         "successor": [
           "https://ror.org/01p7qe739"
+        ]
+      }
+    },
+    "https://ror.org/012mgrb02": {
+      "name": "De La Salle Medical and Health Sciences Institute",
+      "status": "active",
+      "city": "Dasmariñas",
+      "country": "Philippines",
+      "relationships": {
+        "predecessor": [
+          "https://ror.org/03a39dd69",
+          "https://ror.org/04xftk194"
         ]
       }
     },
@@ -312,6 +336,17 @@
         ]
       }
     },
+    "https://ror.org/03mc19e15": {
+      "name": "Weston General Hospital",
+      "status": "active",
+      "city": "Weston-super-Mare",
+      "country": "United Kingdom",
+      "relationships": {
+        "parent": [
+          "https://ror.org/054vvq170"
+        ]
+      }
+    },
     "https://ror.org/0419drx70": {
       "name": "Hokkaido University Hospital",
       "status": "active",
@@ -323,6 +358,17 @@
         ]
       }
     },
+    "https://ror.org/04br0rs05": {
+      "name": "Health Sciences North",
+      "status": "active",
+      "city": "Sudbury",
+      "country": "Canada",
+      "relationships": {
+        "child": [
+          "https://ror.org/01g1qg816"
+        ]
+      }
+    },
     "https://ror.org/04dshd728": {
       "name": "State Key Laboratory of Magnetism",
       "status": "active",
@@ -331,6 +377,33 @@
       "relationships": {
         "parent": [
           "https://ror.org/05cvf7v30"
+        ]
+      }
+    },
+    "https://ror.org/04dtfyh05": {
+      "name": "Peninsula College of Medicine and Dentistry",
+      "status": "inactive",
+      "city": "Plymouth",
+      "country": "United Kingdom",
+      "relationships": {
+        "related": [
+          "https://ror.org/008n7pv89",
+          "https://ror.org/03yghzc09"
+        ],
+        "successor": [
+          "https://ror.org/008n7pv89",
+          "https://ror.org/03yghzc09"
+        ]
+      }
+    },
+    "https://ror.org/04xftk194": {
+      "name": "De La Salle University",
+      "status": "active",
+      "city": "Manila",
+      "country": "Philippines",
+      "relationships": {
+        "related": [
+          "https://ror.org/04654kg92"
         ]
       }
     },
@@ -411,6 +484,20 @@
         ],
         "parent": [
           "https://ror.org/034t30j35"
+        ]
+      }
+    },
+    "https://ror.org/05fkxeh29": {
+      "name": "Sudbury Regional Hospital",
+      "status": "inactive",
+      "city": "Sudbury",
+      "country": "Canada",
+      "relationships": {
+        "parent": [
+          "https://ror.org/04br0rs05"
+        ],
+        "successor": [
+          "https://ror.org/04br0rs05"
         ]
       }
     }
@@ -623,7 +710,7 @@
     },
     {
       "id": "stale_renamed",
-      "organisations": "Kyushu Tokai University (inactive) assigned, Tokai University (its successor) gold",
+      "organisations": "Kyushu Tokai University (inactive) assigned, Tokai University (its successor) gold: stale under all three rules, since succession edges ground nothing under any rule",
       "gold": {
         "decision": "accepted",
         "ror_ids": [
@@ -647,10 +734,10 @@
           "false_negatives": 1
         },
         "any_relationship": {
-          "outcome": "correct",
-          "true_positives": 1,
-          "false_positives": 0,
-          "false_negatives": 0
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
         }
       },
       "expected_relations": [
@@ -688,10 +775,10 @@
           "false_negatives": 1
         },
         "any_relationship": {
-          "outcome": "correct",
-          "true_positives": 1,
-          "false_positives": 0,
-          "false_negatives": 0
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
         }
       },
       "expected_relations": [
@@ -729,10 +816,10 @@
           "false_negatives": 1
         },
         "any_relationship": {
-          "outcome": "correct",
-          "true_positives": 1,
-          "false_positives": 0,
-          "false_negatives": 0
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
         }
       },
       "expected_relations": [
@@ -746,7 +833,7 @@
     },
     {
       "id": "stale_two_step_chain",
-      "organisations": "Weston Area Health NHS Trust (inactive) assigned, Bristol NHS Foundation Trust gold: Weston's successor is University Hospitals Bristol and Weston NHS Foundation Trust (inactive), whose successor is Bristol NHS Foundation Trust. Two successor edges, followed transitively, so the relation is predecessor_of_gold and the item is stale under EXACT and PARENT_CHILD; under ANY_RELATIONSHIP the chain is a qualifying relation and the pair is a hit, exactly as a one-step chain is",
+      "organisations": "Weston Area Health NHS Trust (inactive) assigned, Bristol NHS Foundation Trust gold: Weston's successor is University Hospitals Bristol and Weston NHS Foundation Trust (inactive), whose successor is Bristol NHS Foundation Trust. Two successor edges, followed transitively, so the relation is predecessor_of_gold and the item is stale under all three rules, exactly as a one-step chain is: succession edges ground nothing under any rule",
       "gold": {
         "decision": "accepted",
         "ror_ids": [
@@ -770,10 +857,10 @@
           "false_negatives": 1
         },
         "any_relationship": {
-          "outcome": "correct",
-          "true_positives": 1,
-          "false_positives": 0,
-          "false_negatives": 0
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
         }
       },
       "expected_relations": [
@@ -787,7 +874,7 @@
     },
     {
       "id": "successor_assigned_inactive_gold",
-      "organisations": "Tokai University assigned, Kyushu Tokai University (inactive, superseded by Tokai) gold: the reverse of stale, only visible if the gold standard names a dead record",
+      "organisations": "Tokai University assigned, Kyushu Tokai University (inactive, superseded by Tokai) gold: the reverse of stale, only possible if the gold standard names a dead record. Gold labels must name the active record, so the scorer refuses the item, naming the gold id, its status and its successor. relation_between still reports successor_of_gold for the pair",
       "gold": {
         "decision": "accepted",
         "ror_ids": [
@@ -797,25 +884,13 @@
       "assigned": [
         "https://ror.org/01p7qe739"
       ],
-      "expected": {
-        "exact": {
-          "outcome": "wrong",
-          "true_positives": 0,
-          "false_positives": 1,
-          "false_negatives": 1
-        },
-        "parent_child": {
-          "outcome": "wrong",
-          "true_positives": 0,
-          "false_positives": 1,
-          "false_negatives": 1
-        },
-        "any_relationship": {
-          "outcome": "correct",
-          "true_positives": 1,
-          "false_positives": 0,
-          "false_negatives": 0
-        }
+      "expected_error": {
+        "type": "ValueError",
+        "mentions": [
+          "https://ror.org/00w0f8567",
+          "inactive",
+          "https://ror.org/01p7qe739"
+        ]
       },
       "expected_relations": [
         {
@@ -1308,7 +1383,7 @@
     },
     {
       "id": "stale_mixed_with_wrong",
-      "organisations": "Kyushu Tokai University (inactive) and Hokkaido University assigned, Tokai University gold: not every ungrounded id is stale, so this is wrong, not stale",
+      "organisations": "Kyushu Tokai University (inactive) and Hokkaido University assigned, Tokai University gold: not every ungrounded id is stale, so this is wrong, not stale, under every rule",
       "gold": {
         "decision": "accepted",
         "ror_ids": [
@@ -1333,10 +1408,10 @@
           "false_negatives": 1
         },
         "any_relationship": {
-          "outcome": "partial",
-          "true_positives": 1,
-          "false_positives": 1,
-          "false_negatives": 0
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 2,
+          "false_negatives": 1
         }
       },
       "expected_relations": [
@@ -1355,7 +1430,7 @@
     },
     {
       "id": "stale_duplicate_beside_correct_id",
-      "organisations": "Kyushu Tokai University (inactive) and Tokai University assigned, Tokai University gold: the correct id is grounded, so the matching is not empty and the stale duplicate makes this partial under EXACT and PARENT_CHILD, not stale; under ANY_RELATIONSHIP both ids are grounded and the extra one is over-assignment. The predecessor relation is still recorded for the stale pair",
+      "organisations": "Kyushu Tokai University (inactive) and Tokai University assigned, Tokai University gold: the correct id is grounded, so the matching is not empty and the stale duplicate makes this partial under every rule, not stale and not over-assigned, since a succession edge grounds nothing. The predecessor relation is still recorded for the stale pair",
       "gold": {
         "decision": "accepted",
         "ror_ids": [
@@ -1380,7 +1455,7 @@
           "false_negatives": 0
         },
         "any_relationship": {
-          "outcome": "over_assigned",
+          "outcome": "partial",
           "true_positives": 1,
           "false_positives": 1,
           "false_negatives": 0
@@ -1402,7 +1477,7 @@
     },
     {
       "id": "stale_sibling_in_multi_affiliation",
-      "organisations": "Kyushu Tokai University (inactive) and University of Oxford assigned, Tokai University and University of Oxford gold: half the assignment is exactly right and the other half is the right institution under its old id. Partial under EXACT and PARENT_CHILD with the predecessor relation recorded; correct under ANY_RELATIONSHIP",
+      "organisations": "Kyushu Tokai University (inactive) and University of Oxford assigned, Tokai University and University of Oxford gold: half the assignment is exactly right and the other half is the right institution under its old id. Partial under every rule with the predecessor relation recorded",
       "gold": {
         "decision": "accepted",
         "ror_ids": [
@@ -1428,10 +1503,10 @@
           "false_negatives": 1
         },
         "any_relationship": {
-          "outcome": "correct",
-          "true_positives": 2,
-          "false_positives": 0,
-          "false_negatives": 0
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 1
         }
       },
       "expected_relations": [
@@ -1591,7 +1666,7 @@
     },
     {
       "id": "gold_no_ror_with_assignment",
-      "organisations": "University of Oxford assigned, gold adjudicated no_ror",
+      "organisations": "University of Oxford assigned, gold adjudicated no_ror: a precision failure, one false positive and nothing else, under every rule",
       "gold": {
         "decision": "no_ror",
         "ror_ids": []
@@ -1602,21 +1677,56 @@
       "expected": {
         "exact": {
           "outcome": "gold_no_ror",
-          "true_positives": null,
-          "false_positives": null,
-          "false_negatives": null
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 0
         },
         "parent_child": {
           "outcome": "gold_no_ror",
-          "true_positives": null,
-          "false_positives": null,
-          "false_negatives": null
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 0
         },
         "any_relationship": {
           "outcome": "gold_no_ror",
-          "true_positives": null,
-          "false_positives": null,
-          "false_negatives": null
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "gold_no_ror_with_two_assigned_ids",
+      "organisations": "University of Oxford (spelled twice, as a full URL and as a bare id) and John Radcliffe Hospital assigned, gold adjudicated no_ror: two distinct normalised ids, so two false positives under every rule. The duplicate spelling collapses before it is counted",
+      "gold": {
+        "decision": "no_ror",
+        "ror_ids": []
+      },
+      "assigned": [
+        "https://ror.org/052gg0110",
+        "052gg0110",
+        "https://ror.org/0080acb59"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "gold_no_ror",
+          "true_positives": 0,
+          "false_positives": 2,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "gold_no_ror",
+          "true_positives": 0,
+          "false_positives": 2,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "gold_no_ror",
+          "true_positives": 0,
+          "false_positives": 2,
+          "false_negatives": 0
         }
       },
       "expected_relations": [],
@@ -1693,6 +1803,258 @@
         }
       ],
       "expected_ancestry_distance": 0
+    },
+    {
+      "id": "live_predecessor_assigned_live_successor_gold",
+      "organisations": "De La Salle University (active) assigned, De La Salle Medical and Health Sciences Institute (active, which names the University as a predecessor) gold: one of the 16 active records in v2.13 with a successor edge to another active record. Nothing is dead, so this is not stale; no hierarchy edge or exact match grounds it, so it is wrong under every rule. The relation is predecessor_of_gold, read from the predecessor edge the Institute asserts",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/012mgrb02"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/04xftk194"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/04xftk194",
+          "gold": "https://ror.org/012mgrb02",
+          "relation": "predecessor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "live_successor_assigned_live_predecessor_gold",
+      "organisations": "De La Salle Medical and Health Sciences Institute (active) assigned, De La Salle University (active) gold: the same pair the other way round. Both records are active, so the gold is accepted and successor_of_gold is a relation a well-formed gold standard can produce. Wrong under every rule: no hierarchy edge exists and a succession edge grounds nothing",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/04xftk194"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/012mgrb02"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/012mgrb02",
+          "gold": "https://ror.org/04xftk194",
+          "relation": "successor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_with_related_edge",
+      "organisations": "Peninsula College of Medicine and Dentistry (inactive) assigned, University of Plymouth gold: the dead record asserts both a related edge and a successor edge to Plymouth (and to Exeter). The relation reported is predecessor_of_gold, since succession outranks related in the priority order, and the item is stale under every rule because the id is dead and lies on a chain to the gold. The related edge grounds nothing: a non-active id never grounds",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/008n7pv89"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/04dtfyh05"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/04dtfyh05",
+          "gold": "https://ror.org/008n7pv89",
+          "relation": "predecessor_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": null
+    },
+    {
+      "id": "stale_with_hierarchy_edge",
+      "organisations": "Sudbury Regional Hospital (inactive) assigned, Health Sciences North gold: the dead record asserts both a parent edge and a successor edge to Health Sciences North, which asserts neither back. The relation reported is child_of_gold, since hierarchy outranks succession in the priority order, and the ancestry diagnostic reads 1, but the item is stale under every rule, including parent_child and any_relationship, because the id is dead: a non-active id never grounds, whatever edge joins it to the gold. Before the tightened rule this grounded as correct under both hierarchy rules",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/04br0rs05"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/05fkxeh29"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "stale",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/05fkxeh29",
+          "gold": "https://ror.org/04br0rs05",
+          "relation": "child_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": 1
+    },
+    {
+      "id": "stale_hierarchy_duplicate_beside_correct_id",
+      "organisations": "Sudbury Regional Hospital (inactive) and Health Sciences North assigned, Health Sciences North gold: the correct id grounds, the dead id does not, so the item is partial under every rule, not over-assigned. The dead id is still carried in stale_assigned",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/04br0rs05"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/05fkxeh29",
+        "https://ror.org/04br0rs05"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        },
+        "parent_child": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        },
+        "any_relationship": {
+          "outcome": "partial",
+          "true_positives": 1,
+          "false_positives": 1,
+          "false_negatives": 0
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/04br0rs05",
+          "gold": "https://ror.org/04br0rs05",
+          "relation": "exact"
+        },
+        {
+          "assigned": "https://ror.org/05fkxeh29",
+          "gold": "https://ror.org/04br0rs05",
+          "relation": "child_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": 0
+    },
+    {
+      "id": "dead_id_with_hierarchy_edge_but_no_chain",
+      "organisations": "Weston Area Health NHS Trust (inactive) assigned, Weston General Hospital (active, which Weston lists as a child) gold: Weston's successor chain runs to University Hospitals Bristol and Weston NHS Foundation Trust and on to Bristol NHS Foundation Trust, the hospital's present parent, and never reaches the hospital itself. The relation is parent_of_gold and the ancestry diagnostic reads 1, but a dead id grounds nothing and without a chain to the gold it is not stale either: simply wrong under every rule",
+      "gold": {
+        "decision": "accepted",
+        "ror_ids": [
+          "https://ror.org/03mc19e15"
+        ]
+      },
+      "assigned": [
+        "https://ror.org/03fpf5m04"
+      ],
+      "expected": {
+        "exact": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "parent_child": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        },
+        "any_relationship": {
+          "outcome": "wrong",
+          "true_positives": 0,
+          "false_positives": 1,
+          "false_negatives": 1
+        }
+      },
+      "expected_relations": [
+        {
+          "assigned": "https://ror.org/03fpf5m04",
+          "gold": "https://ror.org/03mc19e15",
+          "relation": "parent_of_gold"
+        }
+      ],
+      "expected_ancestry_distance": 1
     }
   ]
 }
