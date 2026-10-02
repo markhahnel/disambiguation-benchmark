@@ -50,6 +50,7 @@ from disambig.env import load_dotenv, require_env  # noqa: E402
 from disambig.httpcache import CachingClient  # noqa: E402
 from disambig.logging_setup import configure_logging, new_run_id  # noqa: E402
 from disambig.models import Item, PublicationContext  # noqa: E402
+from disambig.redact import redact_emails, redact_many  # noqa: E402
 from disambig.signals import (  # noqa: E402
     contains_normalized,
     dominant_non_latin_script,
@@ -360,10 +361,17 @@ def main() -> None:
                         continue
                     item_id = hashlib.sha256(f"{context.doi}|{raw}".encode()).hexdigest()[:16]
                     sub = strategy.sub_stratum_fn(raw) if strategy.sub_stratum_fn else None
+                    # Personal email addresses are redacted before anything is
+                    # labelled or published (METHODS.md); item_id above is computed
+                    # from the original string so it is stable across redaction.
+                    redacted_raw, _ = redact_emails(raw)
+                    context.coauthor_affiliations, _ = redact_many(
+                        context.coauthor_affiliations
+                    )
                     candidates.append(
                         Item(
                             item_id=item_id,
-                            raw_affiliation=raw,
+                            raw_affiliation=redacted_raw,
                             stratum=strategy.stratum,
                             sub_stratum=sub,
                             source_frame=f"openalex-pilot-{snapshot_date}",

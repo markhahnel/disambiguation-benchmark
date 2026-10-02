@@ -7,6 +7,7 @@ __pycache__/
 config/.env
 data/interim/http_cache.sqlite
 data/raw/ror/
+data/raw/openalex/
 data/interim/review.sqlite
 data/demo/demo_review.sqlite
 logs/*.jsonl

@@ -139,6 +139,15 @@ the snapshot date, and the ROR pin, `data/raw/` is immutable snapshots,
 is the shared figure code, `outputs/` is findings, provenance, figures and
 tables, and `post/` is the drafts and generated claims registers.
 
+## Licence
+
+Code is MIT (see `LICENSE`). Data, outputs and published text are CC BY
+4.0 (see `LICENSE-DATA.md`). Raw API snapshots are not redistributed here;
+they stay on disk under `data/raw/` (gitignored) and are deposited at
+release where the provider's terms allow. Personal email addresses that
+publishers append to affiliation strings have their local part removed
+before publication (`src/disambig/redact.py`, documented in METHODS.md).
+
 ## Manual steps
 
 - `config/.env` values must be provided by a human.

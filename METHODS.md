@@ -144,6 +144,19 @@ successor relationships in the pinned ROR data dump. Routing heuristics
 decide only what gets sampled into a stratum; the verified stratum is
 confirmed at adjudication and travels with the frozen gold standard.
 
+### Published strings and personal data
+
+Publisher metadata often appends the corresponding author's email address
+to an affiliation ("Electronic address: name@example.org"). Before any
+item is labelled or published, the local part of every email address in
+every affiliation string is replaced with `redacted`, by one regular
+expression applied identically to all items (`src/disambig/redact.py`).
+The domain is kept, because "@kuleuven.be" is an institutional cue that
+every evaluated source also saw, and removing it would change the task.
+The raw snapshot on disk retains the original string and is not
+redistributed in the code repository; the item identifier is computed
+from the original string, so it is stable across redaction.
+
 ### Labelling protocol
 
 Two-stage, and the stages have different powers:
